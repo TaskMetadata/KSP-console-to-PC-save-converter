@@ -1,0 +1,295 @@
+import os
+import json
+import zipfile
+import asyncio
+import aiofiles
+import logging
+from datetime import datetime
+from typing import Optional, Dict, Tuple, Any
+from httpx import HTTPStatusError
+from pydantic import BaseModel, RootModel
+
+from auth_manager_ex import AuthenticationManagerEx
+from xbox.webapi.common.exceptions import AuthenticationException
+from xbox.webapi.authentication.models import OAuth2TokenResponse, XAUResponse, XADResponse, XSTSResponse
+from xbox.webapi.common.signed_session import SignedSession, RequestSigner
+
+logger = logging.getLogger(__name__)
+
+class DiscordUserXblContext(BaseModel):
+    oauth: OAuth2TokenResponse
+    device_token: XADResponse
+    user_token: XAUResponse
+    xsts_token: XSTSResponse
+    device_id: str
+    signing_key: str
+
+class UserTokenData(RootModel):
+    root: Dict[str, DiscordUserXblContext]
+
+    def __iter__(self):
+        return iter(self.root)
+
+    def __getitem__(self, item):
+        return self.root[item]
+    
+    def __setitem__(self, key, val):
+        self.root[key] = val
+
+
+class XboxSaveManager:
+    def __init__(self, client_id: str, redirect_uri: str, tokens_file: str = "user_tokens.json", download_dir: str = "downloads"):
+        self.client_id = client_id
+        self.redirect_uri = redirect_uri
+        self.tokens_file = tokens_file
+        self.download_dir = download_dir
+        self.user_tokens_data: UserTokenData = self.load_user_tokens(self.tokens_file)
+
+        # Game configurations
+        self.di_games = {
+            "2.0": {
+                "title_id": "1480659480",
+                "scid": "99330100-8230-4304-8448-b7b80ffcf70b",
+                "pfn": "DisneyConsumerProductsand.DisneyInfinityRevolution_jrvsvx228t8wp"
+            },
+            "3.0": {
+                "title_id": "1480659481",
+                "scid": "7dd70100-ef4f-47b7-bcfb-0e6a09230e16",
+                "pfn": "DisneyConsumerProductsand.Infinity3_jrvsvx228t8wp"
+            }
+        }
+
+    @staticmethod
+    def load_user_tokens(tokens_file: str) -> UserTokenData:
+        """Load user tokens from the tokens file."""
+        if os.path.exists(tokens_file):
+            try:
+                with open(tokens_file, 'rt') as f:
+                    data = f.read()
+                    if not data:
+                        return UserTokenData({})
+                    res = UserTokenData.model_validate_json(data)
+                logger.info(f"Loaded {len(res.root.items())} user tokens.")
+                return res
+            except json.JSONDecodeError:
+                logger.error(f"Error decoding {tokens_file}. Starting empty.")
+                return UserTokenData({})
+        else:
+            logger.info(f"{tokens_file} not found. Starting empty.")
+            return UserTokenData({})
+
+    def save_user_tokens(self) -> None:
+        """Save user tokens to the tokens file."""
+        try:
+            with open(self.tokens_file, 'wt') as f:
+                data = self.user_tokens_data.model_dump_json(indent=2)
+                f.write(data)
+            logger.info(f"Saved {len(self.user_tokens_data.root.items())} user tokens.")
+        except Exception as e:
+            logger.error(f"Error saving user tokens: {e}")
+
+    async def generate_auth_url(self) -> str:
+        """Generate the Xbox Live authentication URL."""
+        async with SignedSession() as session:
+            return (
+                # No need for signed session here, we are not doing any web requests
+                AuthenticationManagerEx(session, self.client_id, None, self.redirect_uri)
+                    .generate_authorization_url()
+            )
+
+    async def process_auth_code(self, auth_code: str, user_id: str) -> bool:
+        """Process the authentication code and store tokens."""
+        try:
+            async with SignedSession() as session:
+                auth_mgr = AuthenticationManagerEx(session, self.client_id, None, self.redirect_uri)
+                await auth_mgr.request_tokens(auth_code)
+
+                if not auth_mgr.xsts_token or not auth_mgr.xsts_token.xuid:
+                    logger.warning("Authentication failed (XSTS/XUID missing)")
+                    return False
+
+                token_data = self._convert_tokens_to_dict(auth_mgr)
+                self.user_tokens_data[user_id] = token_data
+                self.save_user_tokens()
+
+                gamertag = auth_mgr.xsts_token.gamertag or f"User_{auth_mgr.xsts_token.xuid}"
+                logger.info(f"Authenticated user as {gamertag}")
+                return True
+
+        except (AuthenticationException, HTTPStatusError) as e:
+            error_msg = str(e)
+            if isinstance(e, HTTPStatusError) and e.response is not None:
+                response_text = e.response.text
+                error_msg += f" (Server: {response_text[min(len(response_text), 200)]})"
+            logger.error(f"Xbox Authentication Error: {type(e).__name__} - {error_msg}")
+            return False
+        except Exception as e:
+            logger.exception(f"Unexpected error: {type(e).__name__} - {e}")
+            return False
+
+    def _convert_tokens_to_dict(self, auth_mgr: AuthenticationManagerEx) -> DiscordUserXblContext:
+        """Convert authentication tokens to a dictionary format for storage."""
+        return DiscordUserXblContext(
+            oauth=auth_mgr.oauth,
+            device_token=auth_mgr.device_token,
+            user_token=auth_mgr.user_token,
+            xsts_token=auth_mgr.xsts_token,
+            device_id=auth_mgr.device_id,
+            signing_key=auth_mgr.session.request_signer.export_signing_key()
+        )
+
+    async def get_auth_manager_and_session(self, user_id: str) -> Optional[Tuple[AuthenticationManagerEx, SignedSession]]:
+        """Get an authenticated session for a user."""
+        if user_id not in self.user_tokens_data:
+            logger.info(f"No tokens found for user {user_id}")
+            return None
+
+        token_info_dict = self.user_tokens_data[user_id]
+        session = SignedSession()
+        try:
+            # Import previously saved signing key
+            session.request_signer.signing_key = RequestSigner.import_signing_key(token_info_dict.signing_key)
+            # Construct AuthenticationManager with previously saved values / tokens
+            auth_mgr = AuthenticationManagerEx(session, self.client_id, None, self.redirect_uri, device_id=token_info_dict.device_id)
+            auth_mgr.oauth = OAuth2TokenResponse.model_validate(token_info_dict.oauth)
+            auth_mgr.device_token = XADResponse.model_validate(token_info_dict.device_token)
+            auth_mgr.user_token = XAUResponse.model_validate(token_info_dict.user_token)
+            auth_mgr.xsts_token = XSTSResponse.model_validate(token_info_dict.xsts_token)
+
+            await auth_mgr.refresh_tokens()
+
+            if not auth_mgr.xsts_token or not auth_mgr.xsts_token.xuid:
+                logger.warning(f"After refresh_tokens, XSTS/XUID still missing for {user_id}")
+                if user_id in self.user_tokens_data:
+                    del self.user_tokens_data[user_id]
+                    self.save_user_tokens()
+                await session.aclose()
+                return None
+
+            logger.info(f"Tokens refreshed for {user_id}. Gamertag: {auth_mgr.xsts_token.gamertag}")
+
+            # Save refreshed tokens
+            refreshed_token_data = self._convert_tokens_to_dict(auth_mgr)
+            self.user_tokens_data[user_id] = refreshed_token_data
+            self.save_user_tokens()
+
+            return auth_mgr, session
+
+        except Exception as e:
+            logger.error(f"Error in get_auth_manager_and_session for {user_id}: {e}")
+            if user_id in self.user_tokens_data:
+                del self.user_tokens_data[user_id]
+                self.save_user_tokens()
+            await session.aclose()
+            # Re-raise exception
+            raise
+
+    async def download_save_files(self, user_id: str, game_version: str) -> Optional[str]:
+        """Download save files for a specific game version."""
+        auth_session_tuple = await self.get_auth_manager_and_session(user_id)
+        if not auth_session_tuple:
+            logger.warning("Failed to get auth manager and session")
+            return None
+
+        auth_mgr, active_session = auth_session_tuple
+        xuid = auth_mgr.xsts_token.xuid
+        gamertag = auth_mgr.xsts_token.gamertag or f"User_{xuid}"
+        game_config = self.di_games[game_version]
+        scid = game_config["scid"]
+        pfn = game_config["pfn"]
+
+        request_id = f"{user_id}_{int(datetime.now().timestamp())}"
+        download_path = os.path.join(self.download_dir, request_id)
+        os.makedirs(download_path, exist_ok=True)
+        zip_filename = f"DI_{game_version}_Saves_{gamertag.replace(' ', '_')}_{request_id}.zip"
+        zip_filepath = os.path.join(download_path, zip_filename)
+        downloaded_files_paths = []
+
+        # List saves
+        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}"
+        headers = {
+            "Authorization": auth_mgr.xsts_token.authorization_header_value,
+            "x-xbl-contract-version": "107",
+            "x-xbl-pfn": pfn,
+            "Accept-Language": "en-US"
+        }
+
+        resp = await active_session.send_signed("GET", download_url, headers=headers)
+        resp.raise_for_status()
+        listing = resp.json()
+
+        print(listing)
+
+        # Extract items from response
+        items = []
+        if isinstance(listing, dict):
+            for key in ['value', 'items', 'data', 'saves', 'blobs', 'Blobs']:
+                if key in listing and isinstance(listing.get(key), list):
+                    items = listing[key]
+                    break
+
+        if not items and isinstance(listing, list):
+            items = listing
+
+        if not items:
+            logger.warning("No items found in title storage")
+            return None
+
+        # Filter for RR files
+        rr_files = []
+        for item in items:
+            if isinstance(item, dict):
+                for key in ['path', 'name', 'Path', 'Name', 'filename', 'fileName', 'DisplayName']:
+                    if key in item and item.get(key) and 'RR' in item[key]:
+                        rr_files.append(item[key])
+                        break
+
+        if not rr_files:
+            logger.warning(f"No files containing 'RR' found for DI {game_version}")
+            return None
+
+        # Download files
+        async def download_blob(filename: str) -> None:
+            download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}/{filename}"
+            resp = await active_session.send_signed("GET", download_url, headers=headers)
+            resp.raise_for_status()
+            contents = await resp.aread()
+            filepath = os.path.join(download_path, filename)
+            async with aiofiles.open(filepath, 'wb') as f:
+                await f.write(contents)
+            downloaded_files_paths.append(filepath)
+
+        await asyncio.gather(*(download_blob(fn) for fn in rr_files))
+
+        if not downloaded_files_paths:
+            logger.warning("Failed to download any save files")
+            return None
+
+        # Create zip file
+        with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
+            for file_path in downloaded_files_paths:
+                if os.path.exists(file_path):
+                    zf.write(file_path, os.path.basename(file_path))
+
+        if os.path.exists(zip_filepath) and os.path.getsize(zip_filepath) > 0:
+            logger.info(f"Successfully downloaded {len(downloaded_files_paths)} files")
+        return downloaded_files_paths
+
+    async def cleanup_files(self, zip_filepath: str, download_path: str) -> None:
+        """Clean up downloaded files and directories."""
+        try:
+            if os.path.exists(zip_filepath):
+                os.remove(zip_filepath)
+                logger.info(f"Cleaned up zip file: {zip_filepath}")
+
+            if os.path.isdir(download_path):
+                for file in os.listdir(download_path):
+                    file_path = os.path.join(download_path, file)
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                        logger.info(f"Cleaned up downloaded file: {file_path}")
+                if not os.listdir(download_path):
+                    os.rmdir(download_path)
+                    logger.info(f"Cleaned up download directory: {download_path}")
+        except Exception as e:
+            logger.warning(f"Error during cleanup: {e}") 

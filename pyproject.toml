@@ -1,0 +1,13 @@
+[project]
+name = "di-discord-bot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "discord.py>=2.5.2",
+    "python-dotenv>=1.1.0",
+    "xbox-webapi @ git+https://github.com/OpenXbox/xbox-webapi-python@0a7aeac9f746466001964743d7a1e8e670560a2b",
+    "aiofiles>=24.1.0",
+    "httpx>=0.28.1",
+]
