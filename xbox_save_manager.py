@@ -5,7 +5,7 @@ import asyncio
 import aiofiles
 import logging
 from datetime import datetime
-from typing import Optional, Dict, Tuple, Any
+from typing import List, Optional, Dict, Tuple, Any
 from httpx import HTTPStatusError
 from pydantic import BaseModel, RootModel
 
@@ -36,6 +36,27 @@ class UserTokenData(RootModel):
     def __setitem__(self, key, val):
         self.root[key] = val
 
+"""
+Titlestorage responses
+"""
+
+class PagingInfo(BaseModel):
+    totalItems: int
+    continuationToken: Optional[str]
+
+class BlobMetadata(BaseModel):
+    fileName: str
+    displayName: Optional[str]
+    etag: str
+    clientFileTime: datetime
+    size: int
+
+class BlobsResponse(BaseModel):
+    blobs: List[BlobMetadata]
+    pagingInfo: PagingInfo
+
+class SavegameAtoms(BaseModel):
+    atoms: Dict[str, str]
 
 
 class XboxSaveManager:
@@ -199,10 +220,9 @@ class XboxSaveManager:
 
         resp = await active_session.send_signed("GET", download_url, headers=headers)
         resp.raise_for_status()
-        listing = resp.json()
+        blobs_response = BlobsResponse.model_validate_json(resp.content)
 
-        print(listing)
-
+        """
         # Extract items from response
         items = []
         if isinstance(listing, dict):
@@ -218,6 +238,7 @@ class XboxSaveManager:
             logger.warning("No items found in title storage")
             return None
 
+
         # Filter for RR files
         rr_files = []
         for item in items:
@@ -230,9 +251,11 @@ class XboxSaveManager:
         if not rr_files:
             logger.warning(f"No files containing 'RR' found for {pfn}")
             return None
+        """
 
         # Download files
         async def download_blob(filename: str) -> None:
+            logger.debug(f"Downloading file {filename}")
             download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}/{filename}"
             resp = await active_session.send_signed("GET", download_url, headers=headers)
             resp.raise_for_status()
@@ -242,7 +265,7 @@ class XboxSaveManager:
                 await f.write(contents)
             downloaded_files_paths.append(filepath)
 
-        await asyncio.gather(*(download_blob(fn) for fn in rr_files))
+        await asyncio.gather(*(download_blob(blob.fileName) for blob in blobs_response.blobs))
 
         if not downloaded_files_paths:
             logger.warning("Failed to download any save files")
