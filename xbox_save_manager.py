@@ -347,7 +347,6 @@ class XboxSaveManager:
             downloaded_files_paths.extend(transformed_downloaded)
             logger.info(f"Downloaded {len(transformed_downloaded)} transformed files")
 
-        print(downloaded_files_paths)
         # Create zip file
         with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
             for file_path in downloaded_files_paths:
