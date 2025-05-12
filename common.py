@@ -5,7 +5,7 @@ class GameMetadata(BaseModel):
     title_id: int
     scid: str
     pfn: str
-    get_files_cls: Optional[str] = None
+    jsonpath_filter: Optional[str] = None
 
 class GameMetadataCollection(RootModel):
     root: Dict[str, GameMetadata]

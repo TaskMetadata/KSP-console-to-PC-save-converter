@@ -5,13 +5,12 @@ import zipfile
 import asyncio
 import aiofiles
 import logging
-import importlib
+import jsonpath_ng
 from datetime import datetime
 from typing import Any, List, Optional, Dict, Tuple
 from httpx import HTTPStatusError
 from pydantic import BaseModel, RootModel
 
-from transforms.dummy_cls import GameFileTransformCls
 from common import load_games_collection
 from models import BlobsResponse
 from auth_manager_ex import AuthenticationManagerEx
@@ -58,7 +57,7 @@ class XboxSaveManager:
         # Tokens
         self.user_tokens_data: UserTokenData = self.load_user_tokens(self.tokens_file)
         # Gamefile transform functions
-        self.transform: Dict[str, GameFileTransformCls] = self.load_transform_cls("games.json")
+        self.transform: Dict[str, jsonpath_ng.JSONPath] = self.load_transform_cls("games.json")
 
     @staticmethod
     def load_transform_cls(games_file: str) -> Dict[str, Any]:
@@ -66,16 +65,15 @@ class XboxSaveManager:
         res = {}
         collection = load_games_collection(games_file)
         for game_name, meta in collection.root.items():
-            if not meta.get_files_cls:
+            if not meta.jsonpath_filter:
                 continue
 
-            logger.debug(f"Importing get_files_cls for {game_name} ({meta.pfn})")
+            logger.debug(f"Importing jsonpath_filter for {game_name} ({meta.pfn})")
             # Import respective cls from module
-            imported = importlib.import_module(meta.get_files_cls).GameFileTransform
-            res[meta.pfn] = imported
+            res[meta.pfn] = jsonpath_ng.parse(meta.jsonpath_filter)
             num += 1
 
-        logger.info(f"Imported {num} file transform classes")
+        logger.info(f"Imported {num} jsonpath filters")
         return res
 
     @staticmethod
@@ -318,14 +316,21 @@ class XboxSaveManager:
         #    json.dump(f, filepath_map, indent=2)
 
         # Assemble list of files to download / transform
-        to_transform: List[GameFileTransformCls] = []
-        transform_cls = self.transform.get(pfn)
-        if transform_cls:
+        jp_filter = self.transform.get(pfn)
+        if jp_filter:
+            to_download: List[Tuple[str, str, str]] = []
             logger.info(f"Title {pfn} requires transformation of blob files")
             for filepath, blob_meta in filepath_map:
-                to_transform.append(transform_cls(filepath, blob_meta))
+                with open(filepath, "rt") as f:
+                    data = json.load(f)
+                res = jp_filter.find(data)
 
-            to_download = [(tt.download_filepath(), tt.save_filepath()) for tt in to_transform if tt.can_download()]
+                if not len(res):
+                    logger.error(f"Failed parsing file {filepath} with filter: {jp_filter}")
+                    continue
+                
+                to_download.extend([(str(r.path), r.value, blob_meta.normalized_filename()) for r in res])
+
             transformed_downloaded = await asyncio.gather(
                 *(self._download_blob_file(
                     active_session,
@@ -335,8 +340,9 @@ class XboxSaveManager:
                     pfn,
                     download_path,
                     dl_filepath,
-                    local_filepath
-                ) for (dl_filepath, local_filepath) in to_download)
+                    # FIXME: This is currently only suited for Disney Infinity, need to write more tests for dry-runs...
+                    atom_key
+                ) for (atom_key, dl_filepath, _local_filepath) in to_download)
             )
             downloaded_files_paths.append(transformed_downloaded)
             logger.info(f"Downloaded {len(transformed_downloaded)} transformed files")
