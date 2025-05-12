@@ -338,6 +338,7 @@ class XboxSaveManager:
                     local_filepath
                 ) for (dl_filepath, local_filepath) in to_download)
             )
+            downloaded_files_paths.append(transformed_downloaded)
             logger.info(f"Downloaded {len(transformed_downloaded)} transformed files")
 
         # Create zip file
@@ -348,7 +349,7 @@ class XboxSaveManager:
 
         if os.path.exists(zip_filepath) and os.path.getsize(zip_filepath) > 0:
             logger.info(f"Successfully downloaded {len(downloaded_files_paths)} files")
-        return downloaded_files_paths
+        return zip_filepath
 
     async def cleanup_files(self, zip_filepath: str, download_path: str) -> None:
         """Clean up downloaded files and directories."""
