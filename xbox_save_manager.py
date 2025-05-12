@@ -37,27 +37,15 @@ class UserTokenData(RootModel):
         self.root[key] = val
 
 
+
 class XboxSaveManager:
     def __init__(self, client_id: str, redirect_uri: str, tokens_file: str = "user_tokens.json", download_dir: str = "downloads"):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.tokens_file = tokens_file
         self.download_dir = download_dir
+        # Tokens
         self.user_tokens_data: UserTokenData = self.load_user_tokens(self.tokens_file)
-
-        # Game configurations
-        self.di_games = {
-            "2.0": {
-                "title_id": "1480659480",
-                "scid": "99330100-8230-4304-8448-b7b80ffcf70b",
-                "pfn": "DisneyConsumerProductsand.DisneyInfinityRevolution_jrvsvx228t8wp"
-            },
-            "3.0": {
-                "title_id": "1480659481",
-                "scid": "7dd70100-ef4f-47b7-bcfb-0e6a09230e16",
-                "pfn": "DisneyConsumerProductsand.Infinity3_jrvsvx228t8wp"
-            }
-        }
 
     @staticmethod
     def load_user_tokens(tokens_file: str) -> UserTokenData:
@@ -182,7 +170,7 @@ class XboxSaveManager:
             # Re-raise exception
             raise
 
-    async def download_save_files(self, user_id: str, game_version: str) -> Optional[str]:
+    async def download_save_files(self, user_id: str, scid: str, pfn: str) -> Optional[str]:
         """Download save files for a specific game version."""
         auth_session_tuple = await self.get_auth_manager_and_session(user_id)
         if not auth_session_tuple:
@@ -192,14 +180,11 @@ class XboxSaveManager:
         auth_mgr, active_session = auth_session_tuple
         xuid = auth_mgr.xsts_token.xuid
         gamertag = auth_mgr.xsts_token.gamertag or f"User_{xuid}"
-        game_config = self.di_games[game_version]
-        scid = game_config["scid"]
-        pfn = game_config["pfn"]
 
         request_id = f"{user_id}_{int(datetime.now().timestamp())}"
         download_path = os.path.join(self.download_dir, request_id)
         os.makedirs(download_path, exist_ok=True)
-        zip_filename = f"DI_{game_version}_Saves_{gamertag.replace(' ', '_')}_{request_id}.zip"
+        zip_filename = f"{pfn}_Saves_{gamertag.replace(' ', '_')}_{request_id}.zip"
         zip_filepath = os.path.join(download_path, zip_filename)
         downloaded_files_paths = []
 
@@ -243,7 +228,7 @@ class XboxSaveManager:
                         break
 
         if not rr_files:
-            logger.warning(f"No files containing 'RR' found for DI {game_version}")
+            logger.warning(f"No files containing 'RR' found for {pfn}")
             return None
 
         # Download files
@@ -290,4 +275,4 @@ class XboxSaveManager:
                     os.rmdir(download_path)
                     logger.info(f"Cleaned up download directory: {download_path}")
         except Exception as e:
-            logger.warning(f"Error during cleanup: {e}") 
+            logger.warning(f"Error during cleanup: {e}")

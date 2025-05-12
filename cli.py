@@ -4,6 +4,7 @@ import logging
 from urllib.parse import urlparse, parse_qs
 from dotenv import load_dotenv
 from xbox_save_manager import XboxSaveManager
+from common import load_games_collection
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -21,6 +22,9 @@ async def main():
             "Ensure XBOX_CLIENT_ID and REDIRECT_URI are set in .env file."
         )
         return
+
+    games = load_games_collection("games.json")
+    games_list = list(games.root.items())
 
     # Initialize XboxSaveManager
     xbox_manager = XboxSaveManager(
@@ -56,22 +60,25 @@ async def main():
 
     # Select game version
     print("\nSelect game version:")
-    print("1. Disney Infinity 2.0")
-    print("2. Disney Infinity 3.0")
-    
+    for i, kvp in enumerate(games_list):
+        name, meta = kvp
+        print(f"{i}. {name}")
+
+    chosen_game = None
     while True:
-        choice = input("Enter your choice (1 or 2): ").strip()
-        if choice == "1":
-            game_version = "2.0"
+        try:
+            choice = int(input(f"Enter your choice (0-{len(games)}): ").strip())
+            chosen_game = games_list[choice]
             break
-        elif choice == "2":
-            game_version = "3.0"
-            break
-        print("Invalid choice. Please enter 1 or 2.")
+        except (ValueError, IndexError):
+            print(f"Invalid choice. Please enter any of the following: {', '.join([str(i) for i in range(len(games))])}.")
+
+    game_title, game_meta = chosen_game
+    print(f"Chosen game: {game_title} -> {game_meta}") 
 
     # Download save files
-    print(f"\n⏳ Downloading DI {game_version} saves...")
-    zip_filepath = await xbox_manager.download_save_files("cli_user", game_version)
+    print(f"\n⏳ Downloading {game_title} saves...")
+    zip_filepath = await xbox_manager.download_save_files("cli_user", game_meta.scid, game_meta.pfn)
     if not zip_filepath:
         print("❌ Failed downloading savegames")
         return

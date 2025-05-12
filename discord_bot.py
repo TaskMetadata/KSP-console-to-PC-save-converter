@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs
 
 from xbox_save_manager import XboxSaveManager
+from common import load_games_collection
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -31,6 +32,9 @@ xbox_manager = XboxSaveManager(
     tokens_file="user_tokens.json",
     download_dir="downloads"
 )
+
+games = load_games_collection("games.json")
+games_list = list(games.root.items())
 
 @bot.event
 async def on_ready():
@@ -112,26 +116,27 @@ class GameVersionSelectView(discord.ui.View):
 
 class GameVersionSelect(discord.ui.Select):
     def __init__(self):
-        options = [
-            discord.SelectOption(
-                label="Disney Infinity 2.0",
-                value="2.0",
-                description="Download for DI 2.0"
-            ),
-            discord.SelectOption(
-                label="Disney Infinity 3.0",
-                value="3.0",
-                description="Download for DI 3.0"
-            ),
-        ]
+
+        options = []
+
+        for game in games_list:
+            game_name, game_meta = game
+            option = discord.SelectOption(
+                label=game_name,
+                value=game_name,
+                description=f"Download {game_name} savedata"
+            )
+            options.append(option)
         super().__init__(
-            placeholder="Select Disney Infinity Version...",
+            placeholder="Select Game Version...",
             options=options
         )
 
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer(thinking=True, ephemeral=False)
-        self.view.game_version = self.values[0]
+        game_meta = games[self.values[0]]
+        game_scid = game_meta.scid
+        game_pfn = game_meta.pfn
 
         # Disable the select menu after selection
         for item in self.view.children:
@@ -145,7 +150,8 @@ class GameVersionSelect(discord.ui.Select):
         # Download save files
         zip_filepath = await xbox_manager.download_save_files(
             str(self.view.interaction.user.id),
-            self.view.game_version
+            game_scid,
+            game_pfn,
         )
 
         if not zip_filepath:
@@ -163,13 +169,13 @@ class GameVersionSelect(discord.ui.Select):
             await xbox_manager.cleanup_files(zip_filepath, download_path)
 
 
-@bot.tree.command(name="getsave", description="Download Disney Infinity (2.0/3.0) Xbox save.")
+@bot.tree.command(name="getsave", description="Download Xbox save.")
 async def get_save_command(interaction: discord.Interaction):
     """Start the save file download process."""
     view = GameVersionSelectView(interaction=interaction)
     await interaction.response.send_message(
         "**Disclaimer & Instructions:**\n"
-        "1. Downloads DI save file from Xbox Cloud.\n"
+        "1. Downloads save file from Xbox Cloud.\n"
         "2. Ensure game played on Xbox & data synced.\n"
         "3. Requires auth via `/authenticate`.\n"
         "4. Select game version below.\n\n"

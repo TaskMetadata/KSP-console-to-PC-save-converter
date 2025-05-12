@@ -178,3 +178,4 @@ cython_debug/
 
 downloads/
 user_tokens.json
+games.json
