@@ -344,9 +344,10 @@ class XboxSaveManager:
                     atom_key
                 ) for (atom_key, dl_filepath, _local_filepath) in to_download)
             )
-            downloaded_files_paths.append(transformed_downloaded)
+            downloaded_files_paths.extend(transformed_downloaded)
             logger.info(f"Downloaded {len(transformed_downloaded)} transformed files")
 
+        print(downloaded_files_paths)
         # Create zip file
         with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
             for file_path in downloaded_files_paths:
