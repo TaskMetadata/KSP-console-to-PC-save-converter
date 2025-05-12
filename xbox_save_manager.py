@@ -145,10 +145,8 @@ class XboxSaveManager:
             return None
 
         token_info_dict = self.user_tokens_data[user_id]
-        session = SignedSession()
+        session = SignedSession.from_pem_signing_key(token_info_dict.signing_key)
         try:
-            # Import previously saved signing key
-            session.request_signer.signing_key = RequestSigner.import_signing_key(token_info_dict.signing_key)
             # Construct AuthenticationManager with previously saved values / tokens
             auth_mgr = AuthenticationManagerEx(session, self.client_id, None, self.redirect_uri, device_id=token_info_dict.device_id)
             auth_mgr.oauth = OAuth2TokenResponse.model_validate(token_info_dict.oauth)
