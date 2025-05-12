@@ -191,6 +191,53 @@ class XboxSaveManager:
             # Re-raise exception
             raise
 
+    @staticmethod
+    def _titlestorage_common_headers(authorization_header: str, pfn: str):
+        return {
+            "Authorization": authorization_header,
+            "x-xbl-contract-version": "107",
+            "x-xbl-pfn": pfn,
+            "Accept-Language": "en-US"
+        }
+
+    async def _download_blob_list(self, session: SignedSession, authorization_header: str, xuid: str, scid: str, pfn: str) -> BlobsResponse:
+        # List saves
+        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}"
+        headers = self._titlestorage_common_headers(authorization_header, pfn)
+
+        resp = await session.send_signed("GET", download_url, headers=headers)
+        resp.raise_for_status()
+        blobs_response = BlobsResponse.model_validate_json(resp.content)
+
+        while blobs_response.pagingInfo.continuationToken is not None:
+            # There are more items to fetch, indicated by continuationToken
+            params = {
+                "skipItems": len(blobs_response.blobs),
+                "continuationToken": blobs_response.pagingInfo.continuationToken
+            }
+            resp = await session.send_signed("GET", download_url, headers=headers, params=params)
+            tmp = BlobsResponse.model_validate_json(resp.content)
+            # Append blobs to initial response object, overwrite pagingInfo with current version
+            blobs_response.blobs.append(tmp.blobs)
+            blobs_response.pagingInfo = tmp.pagingInfo
+
+        return blobs_response
+
+    async def _download_blob_file(self, session: SignedSession, authorization_header: str, xuid: str, scid: str, pfn: str, download_path: str, filename: str) -> str:
+        """Returns filepath"""
+        # Download files
+        logger.debug(f"Downloading file {filename}")
+        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}/{filename}"
+        headers = self._titlestorage_common_headers(authorization_header, pfn)
+
+        resp = await session.send_signed("GET", download_url, headers=headers)
+        resp.raise_for_status()
+        contents = await resp.aread()
+        filepath = os.path.join(download_path, filename)
+        async with aiofiles.open(filepath, 'wb') as f:
+            await f.write(contents)
+        return filepath
+
     async def download_save_files(self, user_id: str, scid: str, pfn: str) -> Optional[str]:
         """Download save files for a specific game version."""
         auth_session_tuple = await self.get_auth_manager_and_session(user_id)
@@ -207,65 +254,33 @@ class XboxSaveManager:
         os.makedirs(download_path, exist_ok=True)
         zip_filename = f"{pfn}_Saves_{gamertag.replace(' ', '_')}_{request_id}.zip"
         zip_filepath = os.path.join(download_path, zip_filename)
-        downloaded_files_paths = []
+        blobs_list_filepath = os.path.join(download_path, "blobs_list.json")
 
-        # List saves
-        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}"
-        headers = {
-            "Authorization": auth_mgr.xsts_token.authorization_header_value,
-            "x-xbl-contract-version": "107",
-            "x-xbl-pfn": pfn,
-            "Accept-Language": "en-US"
-        }
+        logger.info("Downloading list of blobs...")
+        blobs_response = await self._download_blob_list(
+            active_session,
+            auth_mgr.xsts_token.authorization_header_value,
+            xuid,
+            scid,
+            pfn
+        )
 
-        resp = await active_session.send_signed("GET", download_url, headers=headers)
-        resp.raise_for_status()
-        blobs_response = BlobsResponse.model_validate_json(resp.content)
+        # Write out the json response to a file (for debugging and completeness)
+        with open(blobs_list_filepath, "wt") as f:
+            data = blobs_response.model_dump_json(indent=2)
+            f.write(data)
 
-        """
-        # Extract items from response
-        items = []
-        if isinstance(listing, dict):
-            for key in ['value', 'items', 'data', 'saves', 'blobs', 'Blobs']:
-                if key in listing and isinstance(listing.get(key), list):
-                    items = listing[key]
-                    break
-
-        if not items and isinstance(listing, list):
-            items = listing
-
-        if not items:
-            logger.warning("No items found in title storage")
-            return None
-
-
-        # Filter for RR files
-        rr_files = []
-        for item in items:
-            if isinstance(item, dict):
-                for key in ['path', 'name', 'Path', 'Name', 'filename', 'fileName', 'DisplayName']:
-                    if key in item and item.get(key) and 'RR' in item[key]:
-                        rr_files.append(item[key])
-                        break
-
-        if not rr_files:
-            logger.warning(f"No files containing 'RR' found for {pfn}")
-            return None
-        """
-
-        # Download files
-        async def download_blob(filename: str) -> None:
-            logger.debug(f"Downloading file {filename}")
-            download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}/{filename}"
-            resp = await active_session.send_signed("GET", download_url, headers=headers)
-            resp.raise_for_status()
-            contents = await resp.aread()
-            filepath = os.path.join(download_path, filename)
-            async with aiofiles.open(filepath, 'wb') as f:
-                await f.write(contents)
-            downloaded_files_paths.append(filepath)
-
-        await asyncio.gather(*(download_blob(blob.fileName) for blob in blobs_response.blobs))
+        downloaded_files_paths = await asyncio.gather(
+            *(self._download_blob_file(
+                active_session,
+                auth_mgr.xsts_token.authorization_header_value,
+                xuid,
+                scid,
+                pfn,
+                download_path,
+                blob.fileName
+            ) for blob in blobs_response.blobs)
+        )
 
         if not downloaded_files_paths:
             logger.warning("Failed to download any save files")
