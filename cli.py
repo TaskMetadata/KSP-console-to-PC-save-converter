@@ -61,13 +61,13 @@ async def main():
     # Select game version
     print("\nSelect game version:")
     for i, kvp in enumerate(games_list):
-        name, meta = kvp
+        name, _ = kvp
         print(f"{i}. {name}")
 
     chosen_game = None
     while True:
         try:
-            choice = int(input(f"Enter your choice (0-{len(games)}): ").strip())
+            choice = int(input(f"Enter your choice (0-{len(games) - 1}): ").strip())
             chosen_game = games_list[choice]
             break
         except (ValueError, IndexError):

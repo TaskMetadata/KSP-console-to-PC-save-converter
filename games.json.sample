@@ -13,11 +13,12 @@
         "title_id": 1624350228,
         "scid": "d3d00100-7976-472f-a3f7-bc1760d19e14",
         "pfn": "Microsoft.ProjectSpark-Dakota_8wekyb3d8bbwe",
-        "get_files_cls": "transforms.project_spark.ProjectSpark"
+        "get_files_cls": "transforms.project_spark"
     },
     "Minecraft: Xbox One Edition": {
         "title_id": 345903534,
         "scid": "05c20100-6e60-45d5-878a-4903149e11ae",
-        "pfn": "Microsoft.ArthurProduct_8wekyb3d8bbwe"
+        "pfn": "Microsoft.ArthurProduct_8wekyb3d8bbwe",
+        "get_files_cls": "transforms.minecraft_lce"
     }
 }
