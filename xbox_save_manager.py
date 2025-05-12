@@ -11,7 +11,7 @@ from typing import Any, List, Optional, Dict, Tuple
 from httpx import HTTPStatusError
 from pydantic import BaseModel, RootModel
 
-from dummy_cls import GameFileTransformCls
+from transforms.dummy_cls import GameFileTransformCls
 from common import load_games_collection
 from models import BlobsResponse
 from auth_manager_ex import AuthenticationManagerEx
@@ -71,7 +71,7 @@ class XboxSaveManager:
 
             logger.debug(f"Importing get_files_cls for {game_name} ({meta.pfn})")
             # Import respective cls from module
-            imported = importlib.import_module(meta.get_files_cls)
+            imported = importlib.import_module(meta.get_files_cls).GameFileTransform
             res[meta.pfn] = imported
             num += 1
 
@@ -314,8 +314,8 @@ class XboxSaveManager:
         # Create a mapping of actual filepath and BlobMetadata
         filepath_map = list(zip(downloaded_files_paths, blobs_response.blobs))
 
-        with open(blobs_filemapping, "wt") as f:
-            json.dump(f, filepath_map, indent=2)
+        #with open(blobs_filemapping, "wt") as f:
+        #    json.dump(f, filepath_map, indent=2)
 
         # Assemble list of files to download / transform
         to_transform: List[GameFileTransformCls] = []

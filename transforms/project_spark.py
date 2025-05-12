@@ -1,7 +1,7 @@
 from models import BlobMetadata
 
 
-class ProjectSpark:
+class GameFileTransform:
     def __init__(self, filepath: str, blob_meta: BlobMetadata):
         self.filepath = filepath
         self.meta = blob_meta
