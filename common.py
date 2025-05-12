@@ -1,10 +1,11 @@
-from typing import Dict
+from typing import Dict, List, Optional
 from pydantic import BaseModel, RootModel
 
 class GameMetadata(BaseModel):
     title_id: int
     scid: str
     pfn: str
+    get_files_cls: Optional[str] = None
 
 class GameMetadataCollection(RootModel):
     root: Dict[str, GameMetadata]

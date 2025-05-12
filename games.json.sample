@@ -12,7 +12,8 @@
     "Project Spark": {
         "title_id": 1624350228,
         "scid": "d3d00100-7976-472f-a3f7-bc1760d19e14",
-        "pfn": "Microsoft.ProjectSpark-Dakota_8wekyb3d8bbwe"
+        "pfn": "Microsoft.ProjectSpark-Dakota_8wekyb3d8bbwe",
+        "get_files_cls": "transforms.project_spark.ProjectSpark"
     },
     "Minecraft: Xbox One Edition": {
         "title_id": 345903534,

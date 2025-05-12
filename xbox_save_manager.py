@@ -1,14 +1,19 @@
 import os
+import re
 import json
 import zipfile
 import asyncio
 import aiofiles
 import logging
+import importlib
 from datetime import datetime
-from typing import List, Optional, Dict, Tuple, Any
+from typing import Any, List, Optional, Dict, Tuple
 from httpx import HTTPStatusError
 from pydantic import BaseModel, RootModel
 
+from dummy_cls import GameFileTransformCls
+from common import load_games_collection
+from models import BlobsResponse
 from auth_manager_ex import AuthenticationManagerEx
 from xbox.webapi.common.exceptions import AuthenticationException
 from xbox.webapi.authentication.models import OAuth2TokenResponse, XAUResponse, XADResponse, XSTSResponse
@@ -36,28 +41,13 @@ class UserTokenData(RootModel):
     def __setitem__(self, key, val):
         self.root[key] = val
 
-"""
-Titlestorage responses
-"""
-
-class PagingInfo(BaseModel):
-    totalItems: int
-    continuationToken: Optional[str] = None
-
-class BlobMetadata(BaseModel):
-    fileName: str
-    displayName: Optional[str] = None
-    etag: str
-    clientFileTime: datetime
-    size: int
-
-class BlobsResponse(BaseModel):
-    blobs: List[BlobMetadata]
-    pagingInfo: PagingInfo
-
-class SavegameAtoms(BaseModel):
-    atoms: Dict[str, str]
-
+def get_valid_filename(name: str):
+    """Borrowed from the Django project"""
+    s = str(name).strip().replace(" ", "_")
+    s = re.sub(r"(?u)[^-\w.]", "", s)
+    if s in {"", ".", ".."}:
+        raise Exception("Could not derive file name from '%s'" % name)
+    return s
 
 class XboxSaveManager:
     def __init__(self, client_id: str, redirect_uri: str, tokens_file: str = "user_tokens.json", download_dir: str = "downloads"):
@@ -67,6 +57,26 @@ class XboxSaveManager:
         self.download_dir = download_dir
         # Tokens
         self.user_tokens_data: UserTokenData = self.load_user_tokens(self.tokens_file)
+        # Gamefile transform functions
+        self.transform: Dict[str, GameFileTransformCls] = self.load_transform_cls("games.json")
+
+    @staticmethod
+    def load_transform_cls(games_file: str) -> Dict[str, Any]:
+        num = 0
+        res = {}
+        collection = load_games_collection(games_file)
+        for game_name, meta in collection.root.items():
+            if not meta.get_files_cls:
+                continue
+
+            logger.debug(f"Importing get_files_cls for {game_name} ({meta.pfn})")
+            # Import respective cls from module
+            imported = importlib.import_module(meta.get_files_cls)
+            res[meta.pfn] = imported
+            num += 1
+
+        logger.info(f"Imported {num} file transform classes")
+        return res
 
     @staticmethod
     def load_user_tokens(tokens_file: str) -> UserTokenData:
@@ -223,7 +233,17 @@ class XboxSaveManager:
 
         return blobs_response
 
-    async def _download_blob_file(self, session: SignedSession, authorization_header: str, xuid: str, scid: str, pfn: str, download_path: str, filename: str) -> str:
+    async def _download_blob_file(
+            self,
+            session: SignedSession,
+            authorization_header: str,
+            xuid: str,
+            scid: str,
+            pfn: str,
+            download_path: str,
+            filename: str,
+            local_filename: Optional[str] = None
+    ) -> str:
         """Returns filepath"""
         # Download files
         logger.debug(f"Downloading file {filename}")
@@ -233,7 +253,11 @@ class XboxSaveManager:
         resp = await session.send_signed("GET", download_url, headers=headers)
         resp.raise_for_status()
         contents = await resp.aread()
-        filepath = os.path.join(download_path, filename)
+        if not local_filename:
+            # Normalize filename (remove invalid chars)
+            local_filename = get_valid_filename(filename)
+
+        filepath = os.path.join(download_path, local_filename)
         async with aiofiles.open(filepath, 'wb') as f:
             await f.write(contents)
         return filepath
@@ -255,6 +279,7 @@ class XboxSaveManager:
         zip_filename = f"{pfn}_Saves_{gamertag.replace(' ', '_')}_{request_id}.zip"
         zip_filepath = os.path.join(download_path, zip_filename)
         blobs_list_filepath = os.path.join(download_path, "blobs_list.json")
+        blobs_filemapping = os.path.join(download_path, "filemap.json")
 
         logger.info("Downloading list of blobs...")
         blobs_response = await self._download_blob_list(
@@ -285,6 +310,35 @@ class XboxSaveManager:
         if not downloaded_files_paths:
             logger.warning("Failed to download any save files")
             return None
+
+        # Create a mapping of actual filepath and BlobMetadata
+        filepath_map = list(zip(downloaded_files_paths, blobs_response.blobs))
+
+        with open(blobs_filemapping, "wt") as f:
+            json.dump(f, filepath_map, indent=2)
+
+        # Assemble list of files to download / transform
+        to_transform: List[GameFileTransformCls] = []
+        transform_cls = self.transform.get(pfn)
+        if transform_cls:
+            logger.info(f"Title {pfn} requires transformation of blob files")
+            for filepath, blob_meta in filepath_map:
+                to_transform.append(transform_cls(filepath, blob_meta))
+
+            to_download = [(tt.download_filepath(), tt.save_filepath()) for tt in to_transform if tt.can_download()]
+            transformed_downloaded = await asyncio.gather(
+                *(self._download_blob_file(
+                    active_session,
+                    auth_mgr.xsts_token.authorization_header_value,
+                    xuid,
+                    scid,
+                    pfn,
+                    download_path,
+                    dl_filepath,
+                    local_filepath
+                ) for (dl_filepath, local_filepath) in to_download)
+            )
+            logger.info(f"Downloaded {len(transformed_downloaded)} transformed files")
 
         # Create zip file
         with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
