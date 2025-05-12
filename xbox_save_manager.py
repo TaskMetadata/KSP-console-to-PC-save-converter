@@ -42,11 +42,11 @@ Titlestorage responses
 
 class PagingInfo(BaseModel):
     totalItems: int
-    continuationToken: Optional[str]
+    continuationToken: Optional[str] = None
 
 class BlobMetadata(BaseModel):
     fileName: str
-    displayName: Optional[str]
+    displayName: Optional[str] = None
     etag: str
     clientFileTime: datetime
     size: int
