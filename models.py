@@ -1,11 +1,25 @@
 """
 Titlestorage response models
 """
-import os
+from pathlib import Path
+from enum import StrEnum
 from datetime import datetime
 from typing import Dict, List, Optional
 from pydantic import BaseModel
 
+class SavegameBlobType(StrEnum):
+    Unknown = "unknown"
+    Savedgame = "savedgame"
+    Binary = "binary"
+    Json = "json"
+    Config = "config"
+
+    @staticmethod
+    def get_type_for_str(input_str: str) -> "SavegameBlobType":
+        for (_, enum_val) in SavegameBlobType._member_map_.items():
+            if input_str.endswith(f",{enum_val.value}"):
+                return enum_val
+        return SavegameBlobType.Unknown
 
 class PagingInfo(BaseModel):
     totalItems: int
@@ -18,25 +32,19 @@ class BlobMetadata(BaseModel):
     clientFileTime: datetime
     size: int
 
-    def normalized_filename(self) -> str:
-        fn_split = self.fileName.split("/")
-        # Get last string after /
-        filename = fn_split[len(fn_split) - 1]
+    def normalized_filepath(self) -> Path:
         filename = (
-            filename
-                .replace(",savedgame", "")
+            self.fileName
+                .removeprefix("/")
+                .removesuffix(",savedgame")
                 .replace("X", ".")
                 .replace("E", "_")
         )
+        return Path(filename)
 
-        localpath = os.pathsep.join(fn_split[:len(fn_split) - 2])
-        localpath = (
-            localpath
-                .replace("X", ".")
-                .replace("E", "_")
-        )
-
-        return os.path.join(localpath, filename)
+    @property
+    def blob_type(self) -> SavegameBlobType:
+        return SavegameBlobType.get_type_for_str(self.fileName)
 
 class BlobsResponse(BaseModel):
     blobs: List[BlobMetadata]

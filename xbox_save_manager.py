@@ -1,3 +1,4 @@
+import collections
 import os
 import re
 import json
@@ -5,13 +6,15 @@ import zipfile
 import asyncio
 import aiofiles
 import logging
+import shutil
 import jsonpath_ng
+from pathlib import Path
 from datetime import datetime
-from typing import Any, List, Optional, Dict, Tuple
+from typing import Any, Iterable, List, Optional, Dict, Tuple
 from httpx import HTTPStatusError
 from pydantic import BaseModel, RootModel
 
-from common import load_games_collection
+from common import GameMetadata, GameMetadataCollection, SaveMethod, load_games_collection
 from models import BlobsResponse
 from auth_manager_ex import AuthenticationManagerEx
 from xbox.webapi.common.exceptions import AuthenticationException
@@ -40,40 +43,240 @@ class UserTokenData(RootModel):
     def __setitem__(self, key, val):
         self.root[key] = val
 
-def get_valid_filename(name: str):
-    """Borrowed from the Django project"""
-    s = str(name).strip().replace(" ", "_")
-    s = re.sub(r"(?u)[^-\w.]", "", s)
-    if s in {"", ".", ".."}:
-        raise Exception("Could not derive file name from '%s'" % name)
-    return s
+class TitleStorageContext:
+    def __init__(
+        self,
+        user_id: str,
+        session: SignedSession,
+        auth_mgr_ex: AuthenticationManagerEx,
+        pfn: str,
+        scid: str,
+        jsonpath_expr: jsonpath_ng.JSONPath,
+        save_method: SaveMethod,
+        download_dir_root: Path
+    ):
+        self.user_id = user_id
+        self.session = session
+        self.xtoken = auth_mgr_ex.xsts_token
+        self.auth_header_value = self.xtoken.authorization_header_value
+        self.xuid = self.xtoken.xuid
+        self.gamertag = self.xtoken.gamertag or f"User_{self.xuid}"
+        self.pfn = pfn
+        self.scid = scid
+        self.jsonpath_expr = jsonpath_expr
+        self.save_method = save_method
+        self.download_dir_root = download_dir_root
+
+    @property
+    def common_headers(self) -> Dict[str, Any]:
+        return {
+            "Authorization": self.auth_header_value,
+            "x-xbl-contract-version": "107",
+            "x-xbl-pfn": self.pfn,
+            "Accept-Language": "en-US"
+        }
+
+    async def _download_blob_list(self) -> BlobsResponse:
+        # List saves
+        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({self.xuid})/scids/{self.scid}"
+
+        resp = await self.session.send_signed("GET", download_url, headers=self.common_headers)
+        resp.raise_for_status()
+        blobs_response = BlobsResponse.model_validate_json(resp.content)
+
+        while blobs_response.pagingInfo.continuationToken is not None:
+            # There are more items to fetch, indicated by continuationToken
+            params = {
+                "skipItems": len(blobs_response.blobs),
+                "continuationToken": blobs_response.pagingInfo.continuationToken
+            }
+            resp = await self.session.send_signed("GET", download_url, headers=self.common_headers, params=params)
+            tmp = BlobsResponse.model_validate_json(resp.content)
+            # Append blobs to initial response object, overwrite pagingInfo with current version
+            blobs_response.blobs.append(tmp.blobs)
+            blobs_response.pagingInfo = tmp.pagingInfo
+
+        return blobs_response
+
+    async def _download_blob_file(
+        self,
+        filename: str,
+        target_localpath: Path,
+    ) -> Path:
+        """Returns filepath"""
+        # Download files
+        logger.debug(f"Downloading file {filename}")
+        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({self.xuid})/scids/{self.scid}/{filename}"
+        resp = await self.session.send_signed("GET", download_url, headers=self.common_headers)
+        resp.raise_for_status()
+        contents = await resp.aread()
+
+        if not target_localpath.parent.exists():
+            target_localpath.parent.mkdir(parents=True, exist_ok=True)
+
+        async with aiofiles.open(target_localpath, 'wb') as f:
+            await f.write(contents)
+        return target_localpath
+
+    async def download_save_files(self) -> Optional[Tuple[Path, Path]]:
+        """
+        Download save files for a specific game version.
+        
+        Returns:
+            tuple of (download_dir, zip_filename)
+        """
+
+        # Create unique dir/filenames for this invocation
+        request_id = f"{self.user_id}_{int(datetime.now().timestamp())}"
+        zip_filename = f"{self.pfn}_Saves_{self.gamertag.replace(' ', '_')}_{request_id}.zip"
+        download_dir = self.download_dir_root.joinpath(request_id)
+        zip_filepath = download_dir.joinpath(zip_filename)
+
+        metadata_dl_path = download_dir.joinpath("_meta")
+        # also creates the parent `download_path`
+        metadata_dl_path.mkdir(parents=True, exist_ok=True)
+        
+        """
+        1. Download metadata (List of blobs)
+        """
+        logger.info("Downloading list of blobs...")
+        blobs_response = await self._download_blob_list()
+
+        # Write out the json response to a file (for debugging and completeness)
+        blobs_filepath = metadata_dl_path.joinpath("blobs_list.json")
+        with open(blobs_filepath, "wt") as f:
+            data = blobs_response.model_dump_json(indent=2)
+            f.write(data)
+
+        logger.info(f"Downloaded blob-metadata with {len(blobs_response.blobs)} entries")
+
+        """
+        2. Download metadata (List of available atoms for each blob)
+        """
+        # Create list of atom metadata to download: remote filename and their local filepath
+        to_download: List[Tuple[str, Path]] = []
+        for blob in blobs_response.blobs:
+            normalized_filepath = blob.normalized_filepath()
+            localpath = (
+                metadata_dl_path
+                    .joinpath(normalized_filepath.parent, normalized_filepath.name + ".meta.json")
+            )
+            to_download.append((blob.fileName, localpath))
+
+        downloaded_metadata_files = await asyncio.gather(
+            *(self._download_blob_file(remote_filename, local_filepath)
+                for (remote_filename, local_filepath) in to_download)
+        )
+
+        if not downloaded_metadata_files:
+            logger.warning("Failed to download any atom-metadata files")
+            return None
+
+        logger.info(f"Downloaded {len(downloaded_metadata_files)} atom-metadata files")
+
+        """
+        3. Download binaries (Actual atom binaries, filtered to grab only non-metadata ones)
+
+        NOTE: There are atoms for binary files and ones for timestamps and other metadata.
+              We only care about the binary files, returned by the jsonpath-filter!
+        """
+        # Create a mapping of actual filepath and BlobMetadata
+        filepath_map = list(zip(downloaded_metadata_files, blobs_response.blobs))
+
+        #with open(blobs_filemapping, "wt") as f:
+        #    json.dump(f, filepath_map, indent=2)
+
+        # Assemble list of files to download / transform
+        to_download.clear()
+
+        for filepath, blob_meta in filepath_map:
+            with open(filepath, "rt") as f:
+                data = json.load(f)
+            res: Iterable[jsonpath_ng.DatumInContext] = self.jsonpath_expr.find(data)
+
+            if not len(res):
+                logger.error(f"Failed parsing file {filepath} with filter: {self.jsonpath_expr}")
+                continue
+            
+            if self.save_method == SaveMethod.AtomFilename:
+                # Use the atom's key as filename for saving locally
+                for a in res:
+                    local_filename = str(a.path)
+                    remote_filename = a.value
+                    local_filepath = download_dir.joinpath(local_filename)
+
+                    logger.debug(f"Adding {remote_filename} -> {local_filepath} to queue")
+                    to_download.append((remote_filename, local_filepath))
+            
+            elif self.save_method == SaveMethod.BlobFilename:
+                # Use the fileName from BlobMetadata for saving locally
+                assert len(res) == 1, "Save-method 'BlobFilename' only expects a single remote filepath!"
+                remote_filename = res[0].value
+                local_filename = blob_meta.normalized_filepath()
+                local_filepath = download_dir.joinpath(local_filename)
+                to_download.append((remote_filename, local_filepath))
+            else:
+                raise Exception(f"Unhandled save-method: {self.save_method}")
+
+        downloaded_binary_files = await asyncio.gather(
+            *(self._download_blob_file(remote_filename, local_filepath)
+                for (remote_filename, local_filepath) in to_download)
+        )
+
+        logger.info(f"Downloaded {len(downloaded_binary_files)} binary savedata files")
+
+        downloaded_files = downloaded_metadata_files
+        downloaded_files.extend(downloaded_binary_files)
+        downloaded_files.append(blobs_filepath)
+
+        """
+        Zip the files up 
+        """
+        with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
+            for file_path in downloaded_files:
+                if file_path.exists():
+                    zf.write(file_path, file_path.relative_to(download_dir))
+
+        if zip_filepath.exists() and zip_filepath.stat().st_size > 0:
+            logger.info(f"Successfully downloaded a total of {len(downloaded_files)} files")
+
+        return (download_dir, zip_filepath)
+
+    @staticmethod
+    async def cleanup_files(download_dir: Path) -> None:
+        """Clean up downloaded files and directories."""
+        try:
+            if download_dir.is_dir():
+                shutil.rmtree(download_dir)
+        except Exception as e:
+            logger.warning(f"Error during cleanup: {e}")
 
 class XboxSaveManager:
     def __init__(self, client_id: str, redirect_uri: str, tokens_file: str = "user_tokens.json", download_dir: str = "downloads"):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.tokens_file = tokens_file
-        self.download_dir = download_dir
+        self.download_dir = Path(download_dir)
         # Tokens
-        self.user_tokens_data: UserTokenData = self.load_user_tokens(self.tokens_file)
+        self.user_tokens_data = self.load_user_tokens(self.tokens_file)
+        self.games_meta = self.load_game_meta_dict("games.json")
         # Gamefile transform functions
-        self.transform: Dict[str, jsonpath_ng.JSONPath] = self.load_transform_cls("games.json")
+        self.jsonpath_exprs = self.load_jsonpath_filters(self.games_meta)
 
     @staticmethod
-    def load_transform_cls(games_file: str) -> Dict[str, Any]:
-        num = 0
+    def load_game_meta_dict(filepath: str) -> Dict[str, GameMetadata]:
+        res = load_games_collection(filepath)
+        # Transform into a dict of PFN -> GameMetadata
+        return {metadata.pfn: metadata for (_, metadata) in res.root.items()}
+
+    @staticmethod
+    def load_jsonpath_filters(collection: GameMetadataCollection) -> Dict[str, jsonpath_ng.JSONPath]:
         res = {}
-        collection = load_games_collection(games_file)
-        for game_name, meta in collection.root.items():
-            if not meta.jsonpath_filter:
-                continue
-
+        for game_name, meta in collection.items():
             logger.debug(f"Importing jsonpath_filter for {game_name} ({meta.pfn})")
-            # Import respective cls from module
+            # Prepare jsonpath expressions
             res[meta.pfn] = jsonpath_ng.parse(meta.jsonpath_filter)
-            num += 1
 
-        logger.info(f"Imported {num} jsonpath filters")
         return res
 
     @staticmethod
@@ -199,179 +402,23 @@ class XboxSaveManager:
             # Re-raise exception
             raise
 
-    @staticmethod
-    def _titlestorage_common_headers(authorization_header: str, pfn: str):
-        return {
-            "Authorization": authorization_header,
-            "x-xbl-contract-version": "107",
-            "x-xbl-pfn": pfn,
-            "Accept-Language": "en-US"
-        }
-
-    async def _download_blob_list(self, session: SignedSession, authorization_header: str, xuid: str, scid: str, pfn: str) -> BlobsResponse:
-        # List saves
-        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}"
-        headers = self._titlestorage_common_headers(authorization_header, pfn)
-
-        resp = await session.send_signed("GET", download_url, headers=headers)
-        resp.raise_for_status()
-        blobs_response = BlobsResponse.model_validate_json(resp.content)
-
-        while blobs_response.pagingInfo.continuationToken is not None:
-            # There are more items to fetch, indicated by continuationToken
-            params = {
-                "skipItems": len(blobs_response.blobs),
-                "continuationToken": blobs_response.pagingInfo.continuationToken
-            }
-            resp = await session.send_signed("GET", download_url, headers=headers, params=params)
-            tmp = BlobsResponse.model_validate_json(resp.content)
-            # Append blobs to initial response object, overwrite pagingInfo with current version
-            blobs_response.blobs.append(tmp.blobs)
-            blobs_response.pagingInfo = tmp.pagingInfo
-
-        return blobs_response
-
-    async def _download_blob_file(
-            self,
-            session: SignedSession,
-            authorization_header: str,
-            xuid: str,
-            scid: str,
-            pfn: str,
-            download_path: str,
-            filename: str,
-            local_filename: Optional[str] = None
-    ) -> str:
-        """Returns filepath"""
-        # Download files
-        logger.debug(f"Downloading file {filename}")
-        download_url = f"https://titlestorage.xboxlive.com/connectedstorage/users/xuid({xuid})/scids/{scid}/{filename}"
-        headers = self._titlestorage_common_headers(authorization_header, pfn)
-
-        resp = await session.send_signed("GET", download_url, headers=headers)
-        resp.raise_for_status()
-        contents = await resp.aread()
-        if not local_filename:
-            # Normalize filename (remove invalid chars)
-            local_filename = get_valid_filename(filename)
-
-        filepath = os.path.join(download_path, local_filename)
-        async with aiofiles.open(filepath, 'wb') as f:
-            await f.write(contents)
-        return filepath
-
-    async def download_save_files(self, user_id: str, scid: str, pfn: str) -> Optional[str]:
-        """Download save files for a specific game version."""
+    async def get_titlestorage_context(self, user_id: str, scid: str, pfn: str) -> TitleStorageContext:
         auth_session_tuple = await self.get_auth_manager_and_session(user_id)
         if not auth_session_tuple:
             logger.warning("Failed to get auth manager and session")
             return None
 
-        auth_mgr, active_session = auth_session_tuple
-        xuid = auth_mgr.xsts_token.xuid
-        gamertag = auth_mgr.xsts_token.gamertag or f"User_{xuid}"
+        auth_mgr, session = auth_session_tuple
+        save_method = self.games_meta.get(pfn).save_method
+        jsonpath_expr = self.jsonpath_exprs.get(pfn)
 
-        request_id = f"{user_id}_{int(datetime.now().timestamp())}"
-        download_path = os.path.join(self.download_dir, request_id)
-        os.makedirs(download_path, exist_ok=True)
-        zip_filename = f"{pfn}_Saves_{gamertag.replace(' ', '_')}_{request_id}.zip"
-        zip_filepath = os.path.join(download_path, zip_filename)
-        blobs_list_filepath = os.path.join(download_path, "blobs_list.json")
-        blobs_filemapping = os.path.join(download_path, "filemap.json")
-
-        logger.info("Downloading list of blobs...")
-        blobs_response = await self._download_blob_list(
-            active_session,
-            auth_mgr.xsts_token.authorization_header_value,
-            xuid,
-            scid,
-            pfn
+        return TitleStorageContext(
+            user_id=user_id,
+            session=session,
+            auth_mgr_ex=auth_mgr,
+            pfn=pfn,
+            scid=scid,
+            jsonpath_expr=jsonpath_expr,
+            save_method=save_method,
+            download_dir_root=self.download_dir
         )
-
-        # Write out the json response to a file (for debugging and completeness)
-        with open(blobs_list_filepath, "wt") as f:
-            data = blobs_response.model_dump_json(indent=2)
-            f.write(data)
-
-        downloaded_files_paths = await asyncio.gather(
-            *(self._download_blob_file(
-                active_session,
-                auth_mgr.xsts_token.authorization_header_value,
-                xuid,
-                scid,
-                pfn,
-                download_path,
-                blob.fileName
-            ) for blob in blobs_response.blobs)
-        )
-
-        if not downloaded_files_paths:
-            logger.warning("Failed to download any save files")
-            return None
-
-        # Create a mapping of actual filepath and BlobMetadata
-        filepath_map = list(zip(downloaded_files_paths, blobs_response.blobs))
-
-        #with open(blobs_filemapping, "wt") as f:
-        #    json.dump(f, filepath_map, indent=2)
-
-        # Assemble list of files to download / transform
-        jp_filter = self.transform.get(pfn)
-        if jp_filter:
-            to_download: List[Tuple[str, str, str]] = []
-            logger.info(f"Title {pfn} requires transformation of blob files")
-            for filepath, blob_meta in filepath_map:
-                with open(filepath, "rt") as f:
-                    data = json.load(f)
-                res = jp_filter.find(data)
-
-                if not len(res):
-                    logger.error(f"Failed parsing file {filepath} with filter: {jp_filter}")
-                    continue
-                
-                to_download.extend([(str(r.path), r.value, blob_meta.normalized_filename()) for r in res])
-
-            transformed_downloaded = await asyncio.gather(
-                *(self._download_blob_file(
-                    active_session,
-                    auth_mgr.xsts_token.authorization_header_value,
-                    xuid,
-                    scid,
-                    pfn,
-                    download_path,
-                    dl_filepath,
-                    # FIXME: This is currently only suited for Disney Infinity, need to write more tests for dry-runs...
-                    atom_key
-                ) for (atom_key, dl_filepath, _local_filepath) in to_download)
-            )
-            downloaded_files_paths.extend(transformed_downloaded)
-            logger.info(f"Downloaded {len(transformed_downloaded)} transformed files")
-
-        # Create zip file
-        with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
-            for file_path in downloaded_files_paths:
-                if os.path.exists(file_path):
-                    zf.write(file_path, os.path.basename(file_path))
-
-        if os.path.exists(zip_filepath) and os.path.getsize(zip_filepath) > 0:
-            logger.info(f"Successfully downloaded {len(downloaded_files_paths)} files")
-        return zip_filepath
-
-    async def cleanup_files(self, zip_filepath: str, download_path: str) -> None:
-        """Clean up downloaded files and directories."""
-        try:
-            if os.path.exists(zip_filepath):
-                os.remove(zip_filepath)
-                logger.info(f"Cleaned up zip file: {zip_filepath}")
-
-            if os.path.isdir(download_path):
-                for file in os.listdir(download_path):
-                    file_path = os.path.join(download_path, file)
-                    if os.path.exists(file_path):
-                        os.remove(file_path)
-                        logger.info(f"Cleaned up downloaded file: {file_path}")
-                if not os.listdir(download_path):
-                    os.rmdir(download_path)
-                    logger.info(f"Cleaned up download directory: {download_path}")
-        except Exception as e:
-            logger.warning(f"Error during cleanup: {e}")

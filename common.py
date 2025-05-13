@@ -1,11 +1,17 @@
-from typing import Dict, List, Optional
+from enum import StrEnum
+from typing import Dict, Optional
 from pydantic import BaseModel, RootModel
+
+class SaveMethod(StrEnum):
+    AtomFilename = "atom_filename"
+    BlobFilename = "blob_filename"
 
 class GameMetadata(BaseModel):
     title_id: int
     scid: str
     pfn: str
-    jsonpath_filter: Optional[str] = None
+    jsonpath_filter: str
+    save_method: SaveMethod
 
 class GameMetadataCollection(RootModel):
     root: Dict[str, GameMetadata]

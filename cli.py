@@ -76,20 +76,24 @@ async def main():
     game_title, game_meta = chosen_game
     print(f"Chosen game: {game_title} -> {game_meta}") 
 
+    # Get Titlestorage context
+    dl_context = await xbox_manager.get_titlestorage_context("cli_user", game_meta.scid, game_meta.pfn)
+
     # Download save files
     print(f"\n⏳ Downloading {game_title} saves...")
-    zip_filepath = await xbox_manager.download_save_files("cli_user", game_meta.scid, game_meta.pfn)
-    if not zip_filepath:
+    res = await dl_context.download_save_files()
+    if not res:
         print("❌ Failed downloading savegames")
         return
 
-    print(f"✅ Save files have been downloaded to: {zip_filepath}")
+    download_dir, zip_filepath = res
+    print(f"✅ Save files have been downloaded to: {download_dir}")
+    print(f"✅ Zip: {zip_filepath}")
     
     # Ask if user wants to clean up
     cleanup = input("\nDo you want to clean up the downloaded files? (y/n): ").strip().lower()
     if cleanup == 'y':
-        download_path = os.path.dirname(zip_filepath)
-        await xbox_manager.cleanup_files(zip_filepath, download_path)
+        await dl_context.cleanup_files(download_dir)
         print("✅ Files cleaned up successfully.")
 
 

@@ -120,7 +120,7 @@ class GameVersionSelect(discord.ui.Select):
         options = []
 
         for game in games_list:
-            game_name, game_meta = game
+            game_name, _ = game
             option = discord.SelectOption(
                 label=game_name,
                 value=game_name,
@@ -148,15 +148,18 @@ class GameVersionSelect(discord.ui.Select):
             logger.warning(f"Error disabling select menu in view: {e}")
 
         # Download save files
-        zip_filepath = await xbox_manager.download_save_files(
+        dl_context = await xbox_manager.get_titlestorage_context(
             str(self.view.interaction.user.id),
             game_scid,
             game_pfn,
         )
 
-        if not zip_filepath:
+        res = await dl_context.download_save_files()
+        if not res:
             await self.view.interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
             return
+
+        download_dir, zip_filepath = res
 
         try:
             await self.view.interaction.followup.send(
@@ -165,8 +168,7 @@ class GameVersionSelect(discord.ui.Select):
             )
         finally:
             # Clean up files after sending
-            download_path = os.path.dirname(zip_filepath)
-            await xbox_manager.cleanup_files(zip_filepath, download_path)
+            await dl_context.cleanup_files(download_dir)
 
 
 @bot.tree.command(name="getsave", description="Download Xbox save.")

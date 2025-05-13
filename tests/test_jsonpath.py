@@ -1,8 +1,8 @@
-import jsonpath_ng
 import json
+import jsonpath_ng
 
 def test_di():
-    with open("tests/di_root.testdata", "rt") as f:
+    with open("tests/testdata/atoms_di.json", "rt") as f:
         data = json.load(f)
     expr = jsonpath_ng.parse("atoms.*")
     res = expr.find(data)
@@ -13,7 +13,7 @@ def test_di():
     assert res[56].value == "04C13128-CED0-42AD-B9E8-E9ACEED95E23,binary"
 
 def test_mc():
-    with open("tests/mc.testdata", "rt") as f:
+    with open("tests/testdata/atoms_mc.json", "rt") as f:
         data = json.load(f)
     expr = jsonpath_ng.parse("atoms.OPTIONDATA")
     res = expr.find(data)
@@ -21,7 +21,7 @@ def test_mc():
     assert res[0].value == "F78D3B2B-FC4C-41B3-8893-CE58B89F4EAB,binary"
 
 def test_ps():
-    with open("tests/ps.testdata", "rt") as f:
+    with open("tests/testdata/atoms_pspark.json", "rt") as f:
         data = json.load(f)
     expr = jsonpath_ng.parse("atoms.Data")
     res = expr.find(data)

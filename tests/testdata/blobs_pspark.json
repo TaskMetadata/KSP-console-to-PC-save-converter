@@ -1,0 +1,1430 @@
+{
+    "blobs": [
+        {
+            "fileName": "assemblies/01099f4e7733899f/01099f4e7733899fXast,savedgame",
+            "etag": "\"0x8D331401B1AB8F9\"",
+            "clientFileTime": "2016-02-09T10:40:11.8000000Z",
+            "size": 1968
+        },
+        {
+            "fileName": "assemblies/01099f4e7733899f/iconXpng,savedgame",
+            "etag": "\"0x8D33140110FC2B0\"",
+            "clientFileTime": "2016-02-09T10:40:12.6630000Z",
+            "size": 148639
+        },
+        {
+            "fileName": "assemblies/01099f4e7733899f/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D331400F307BA9\"",
+            "clientFileTime": "2016-02-09T10:40:07.9810000Z",
+            "size": 366
+        },
+        {
+            "fileName": "assemblies/01099f4e7733899f/objectsXass,savedgame",
+            "etag": "\"0x8D331401027E943\"",
+            "clientFileTime": "2016-02-09T10:40:10.8700000Z",
+            "size": 3567
+        },
+        {
+            "fileName": "assemblies/01099f4e7733899f/requirementsXbin,savedgame",
+            "etag": "\"0x8D331401233C96B\"",
+            "clientFileTime": "2016-02-09T10:40:08.9010000Z",
+            "size": 250
+        },
+        {
+            "fileName": "assemblies/01099f4e7733899f/resourcesXbin,savedgame",
+            "etag": "\"0x8D3313FE6DF1077\"",
+            "clientFileTime": "2016-02-09T10:40:09.8740000Z",
+            "size": 109
+        },
+        {
+            "fileName": "assemblies/0115954669ba7bef/0115954669ba7befXast,savedgame",
+            "etag": "\"0x8D63D652F0B3711\"",
+            "clientFileTime": "2018-10-28T11:15:35.2990000Z",
+            "size": 1974
+        },
+        {
+            "fileName": "assemblies/0115954669ba7bef/iconXpng,savedgame",
+            "etag": "\"0x8D63D6528C230A2\"",
+            "clientFileTime": "2018-10-28T11:15:35.7850000Z",
+            "size": 131250
+        },
+        {
+            "fileName": "assemblies/0115954669ba7bef/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D63D652176946B\"",
+            "clientFileTime": "2018-10-28T11:15:34.2130000Z",
+            "size": 1078
+        },
+        {
+            "fileName": "assemblies/0115954669ba7bef/objectsXass,savedgame",
+            "etag": "\"0x8D63D651BD27E93\"",
+            "clientFileTime": "2018-10-28T11:15:34.7110000Z",
+            "size": 5667
+        },
+        {
+            "fileName": "assemblies/0115954669ba7bef/requirementsXbin,savedgame",
+            "etag": "\"0x8D63D65154D9686\"",
+            "clientFileTime": "2018-10-28T11:15:33.6590000Z",
+            "size": 161
+        },
+        {
+            "fileName": "assemblies/0115954669ba7bef/resourcesXbin,savedgame",
+            "etag": "\"0x8D63D650EEF797E\"",
+            "clientFileTime": "2018-10-28T11:15:33.1610000Z",
+            "size": 109
+        },
+        {
+            "fileName": "assemblies/01298b6ea434908f/01298b6ea434908fXast,savedgame",
+            "etag": "\"0x8D3CC9EC6109848\"",
+            "clientFileTime": "2016-08-15T10:08:37.6040000Z",
+            "size": 1958
+        },
+        {
+            "fileName": "assemblies/01298b6ea434908f/iconXpng,savedgame",
+            "etag": "\"0x8D3CC9E1A8DC13B\"",
+            "clientFileTime": "2016-08-15T10:08:38.4670000Z",
+            "size": 66618
+        },
+        {
+            "fileName": "assemblies/01298b6ea434908f/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3CC9EC8EFCE7A\"",
+            "clientFileTime": "2016-08-15T10:08:35.8000000Z",
+            "size": 1596
+        },
+        {
+            "fileName": "assemblies/01298b6ea434908f/objectsXass,savedgame",
+            "etag": "\"0x8D3CCA0F913F7D9\"",
+            "clientFileTime": "2016-08-15T10:08:36.6740000Z",
+            "size": 12017
+        },
+        {
+            "fileName": "assemblies/01298b6ea434908f/requirementsXbin,savedgame",
+            "etag": "\"0x8D3CC9ECC13AFCA\"",
+            "clientFileTime": "2016-08-15T10:08:33.5860000Z",
+            "size": 458
+        },
+        {
+            "fileName": "assemblies/01298b6ea434908f/resourcesXbin,savedgame",
+            "etag": "\"0x8D3CC9EA4D2BA2D\"",
+            "clientFileTime": "2016-08-15T10:08:34.8360000Z",
+            "size": 1198203
+        },
+        {
+            "fileName": "assemblies/0133f6681e6df707/0133f6681e6df707Xast,savedgame",
+            "etag": "\"0x8D3313AAA9D11B2\"",
+            "clientFileTime": "2016-02-06T10:14:53.4600000Z",
+            "size": 1958
+        },
+        {
+            "fileName": "assemblies/0133f6681e6df707/iconXpng,savedgame",
+            "etag": "\"0x8D3313AB15D3F6D\"",
+            "clientFileTime": "2016-02-06T10:14:54.2460000Z",
+            "size": 114594
+        },
+        {
+            "fileName": "assemblies/0133f6681e6df707/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3313947B0B970\"",
+            "clientFileTime": "2016-02-06T10:14:50.3050000Z",
+            "size": 292
+        },
+        {
+            "fileName": "assemblies/0133f6681e6df707/objectsXass,savedgame",
+            "etag": "\"0x8D33139D9214FF7\"",
+            "clientFileTime": "2016-02-06T10:14:52.1980000Z",
+            "size": 3180
+        },
+        {
+            "fileName": "assemblies/0133f6681e6df707/requirementsXbin,savedgame",
+            "etag": "\"0x8D33139F2F4FD54\"",
+            "clientFileTime": "2016-02-06T10:14:49.2650000Z",
+            "size": 283
+        },
+        {
+            "fileName": "assemblies/0133f6681e6df707/resourcesXbin,savedgame",
+            "etag": "\"0x8D3313BB7578F4E\"",
+            "clientFileTime": "2016-02-06T10:14:51.1790000Z",
+            "size": 109
+        },
+        {
+            "fileName": "assemblies/01872970d83c5f05/01872970d83c5f05Xast,savedgame",
+            "etag": "\"0x8D3E219F27FE06E\"",
+            "clientFileTime": "2016-08-31T06:21:36.9160000Z",
+            "size": 1962
+        },
+        {
+            "fileName": "assemblies/01872970d83c5f05/iconXpng,savedgame",
+            "etag": "\"0x8D3E21A57E68C06\"",
+            "clientFileTime": "2016-08-31T06:21:37.6690000Z",
+            "size": 48701
+        },
+        {
+            "fileName": "assemblies/01872970d83c5f05/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3E2194509733F\"",
+            "clientFileTime": "2016-08-31T06:21:35.2120000Z",
+            "size": 3330
+        },
+        {
+            "fileName": "assemblies/01872970d83c5f05/objectsXass,savedgame",
+            "etag": "\"0x8D3E2194EF31E15\"",
+            "clientFileTime": "2016-08-31T06:21:36.0410000Z",
+            "size": 17729
+        },
+        {
+            "fileName": "assemblies/01872970d83c5f05/requirementsXbin,savedgame",
+            "etag": "\"0x8D3E2198DE7F928\"",
+            "clientFileTime": "2016-08-31T06:21:32.9080000Z",
+            "size": 634
+        },
+        {
+            "fileName": "assemblies/01872970d83c5f05/resourcesXbin,savedgame",
+            "etag": "\"0x8D3E219D29A7AC3\"",
+            "clientFileTime": "2016-08-31T06:21:34.1830000Z",
+            "size": 1338239
+        },
+        {
+            "fileName": "assemblies/0196344838d9b929/0196344838d9b929Xast,savedgame",
+            "etag": "\"0x8D476B298C9F17F\"",
+            "clientFileTime": "2017-03-29T14:36:06.8490000Z",
+            "size": 1962
+        },
+        {
+            "fileName": "assemblies/0196344838d9b929/iconXpng,savedgame",
+            "etag": "\"0x8D476B299BE29FB\"",
+            "clientFileTime": "2017-03-29T14:36:07.9990000Z",
+            "size": 170688
+        },
+        {
+            "fileName": "assemblies/0196344838d9b929/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D476B28B40BA64\"",
+            "clientFileTime": "2017-03-29T14:36:03.6050000Z",
+            "size": 214
+        },
+        {
+            "fileName": "assemblies/0196344838d9b929/objectsXass,savedgame",
+            "etag": "\"0x8D476B297EE7728\"",
+            "clientFileTime": "2017-03-29T14:36:05.7420000Z",
+            "size": 8514
+        },
+        {
+            "fileName": "assemblies/0196344838d9b929/requirementsXbin,savedgame",
+            "etag": "\"0x8D476B26BB0FA7F\"",
+            "clientFileTime": "2017-03-29T14:36:02.6750000Z",
+            "size": 356
+        },
+        {
+            "fileName": "assemblies/0196344838d9b929/resourcesXbin,savedgame",
+            "etag": "\"0x8D476B27661F607\"",
+            "clientFileTime": "2017-03-29T14:36:04.5350000Z",
+            "size": 109
+        },
+        {
+            "fileName": "assemblies/01fdba14ca9d4977/01fdba14ca9d4977Xast,savedgame",
+            "etag": "\"0x8D33139EEC3BB4A\"",
+            "clientFileTime": "2014-09-01T17:08:48.8410000Z",
+            "size": 1950
+        },
+        {
+            "fileName": "assemblies/01fdba14ca9d4977/iconXpng,savedgame",
+            "etag": "\"0x8D3313AB5B5259F\"",
+            "clientFileTime": "2014-09-01T17:08:49.9260000Z",
+            "size": 254853
+        },
+        {
+            "fileName": "assemblies/01fdba14ca9d4977/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3313B65919CB1\"",
+            "clientFileTime": "2014-09-01T17:08:44.1800000Z",
+            "size": 398
+        },
+        {
+            "fileName": "assemblies/01fdba14ca9d4977/objectsXass,savedgame",
+            "etag": "\"0x8D32EDE7BCD389F\"",
+            "clientFileTime": "2014-09-01T17:08:47.8340000Z",
+            "size": 4159
+        },
+        {
+            "fileName": "assemblies/01fdba14ca9d4977/requirementsXbin,savedgame",
+            "etag": "\"0x8D3313B27424975\"",
+            "clientFileTime": "2014-09-01T17:08:46.2070000Z",
+            "size": 261
+        },
+        {
+            "fileName": "assemblies/01fdba14ca9d4977/resourcesXbin,savedgame",
+            "etag": "\"0x8D3313B6CDB4037\"",
+            "clientFileTime": "2014-09-01T17:08:45.2220000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/0208d973544f46b8/0208d973544f46b8Xast,savedgame",
+            "etag": "\"0x8D5239D4C99CE45\"",
+            "clientFileTime": "2017-11-04T15:46:49.1630000Z",
+            "size": 1980
+        },
+        {
+            "fileName": "brains/0208d973544f46b8/iconXpng,savedgame",
+            "etag": "\"0x8D5239D5D92CF82\"",
+            "clientFileTime": "2017-11-04T15:46:49.8500000Z",
+            "size": 137731
+        },
+        {
+            "fileName": "brains/0208d973544f46b8/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D5239D5901AA5D\"",
+            "clientFileTime": "2017-11-04T15:46:46.7940000Z",
+            "size": 222
+        },
+        {
+            "fileName": "brains/0208d973544f46b8/objectsXhead,savedgame",
+            "etag": "\"0x8D5239CCDDB297C\"",
+            "clientFileTime": "2017-11-04T15:46:48.4890000Z",
+            "size": 1425
+        },
+        {
+            "fileName": "brains/0208d973544f46b8/requirementsXbin,savedgame",
+            "etag": "\"0x8D5239D1C520239\"",
+            "clientFileTime": "2017-11-04T15:46:47.9890000Z",
+            "size": 209
+        },
+        {
+            "fileName": "brains/0208d973544f46b8/resourcesXbin,savedgame",
+            "etag": "\"0x8D5239CC1852BF3\"",
+            "clientFileTime": "2017-11-04T15:46:47.3360000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/021663576440cd42/021663576440cd42Xast,savedgame",
+            "etag": "\"0x8D50FF3DB54491E\"",
+            "clientFileTime": "2014-09-01T17:55:32.6760000Z",
+            "size": 2040
+        },
+        {
+            "fileName": "brains/021663576440cd42/iconXpng,savedgame",
+            "etag": "\"0x8D50FF3D5DC0239\"",
+            "clientFileTime": "2014-09-01T17:55:33.6170000Z",
+            "size": 111795
+        },
+        {
+            "fileName": "brains/021663576440cd42/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D50FF3CED405F0\"",
+            "clientFileTime": "2014-09-01T17:55:30.6620000Z",
+            "size": 3112
+        },
+        {
+            "fileName": "brains/021663576440cd42/objectsXhead,savedgame",
+            "etag": "\"0x8D50FF3C5C55942\"",
+            "clientFileTime": "2014-09-01T17:55:31.5590000Z",
+            "size": 9666
+        },
+        {
+            "fileName": "brains/021663576440cd42/requirementsXbin,savedgame",
+            "etag": "\"0x8D50FF3C0AE5D27\"",
+            "clientFileTime": "2014-09-01T17:55:29.2670000Z",
+            "size": 345
+        },
+        {
+            "fileName": "brains/021663576440cd42/resourcesXbin,savedgame",
+            "etag": "\"0x8D50FF3BB24D3E6\"",
+            "clientFileTime": "2014-09-01T17:55:28.2260000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/0225ab9f13f7da72/0225ab9f13f7da72Xast,savedgame",
+            "etag": "\"0x8D3313C05712095\"",
+            "clientFileTime": "2014-09-01T16:31:05.3920000Z",
+            "size": 2032
+        },
+        {
+            "fileName": "brains/0225ab9f13f7da72/iconXpng,savedgame",
+            "etag": "\"0x8D3313C07F61EDA\"",
+            "clientFileTime": "2014-09-01T16:31:06.5530000Z",
+            "size": 105918
+        },
+        {
+            "fileName": "brains/0225ab9f13f7da72/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3313C37AE3279\"",
+            "clientFileTime": "2014-09-01T16:31:01.7600000Z",
+            "size": 920
+        },
+        {
+            "fileName": "brains/0225ab9f13f7da72/objectsXhead,savedgame",
+            "etag": "\"0x8D3313C0151962B\"",
+            "clientFileTime": "2014-09-01T16:31:04.3510000Z",
+            "size": 5437
+        },
+        {
+            "fileName": "brains/0225ab9f13f7da72/requirementsXbin,savedgame",
+            "etag": "\"0x8D3313C7787E14A\"",
+            "clientFileTime": "2014-09-01T16:31:02.8020000Z",
+            "size": 353
+        },
+        {
+            "fileName": "brains/0225ab9f13f7da72/resourcesXbin,savedgame",
+            "etag": "\"0x8D3313C0245F5C7\"",
+            "clientFileTime": "2014-09-01T16:31:00.6760000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/02335f11cb981160/02335f11cb981160Xast,savedgame",
+            "etag": "\"0x8D8B8A7B3C67E82\"",
+            "clientFileTime": "2019-12-13T04:42:51.1910000Z",
+            "size": 1924
+        },
+        {
+            "fileName": "brains/02335f11cb981160/iconXpng,savedgame",
+            "etag": "\"0x8D8B8A78F43D51B\"",
+            "clientFileTime": "2019-12-13T04:42:51.9660000Z",
+            "size": 64480
+        },
+        {
+            "fileName": "brains/02335f11cb981160/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D8B8A76F4758B4\"",
+            "clientFileTime": "2019-12-13T04:42:48.7790000Z",
+            "size": 480
+        },
+        {
+            "fileName": "brains/02335f11cb981160/objectsXhead,savedgame",
+            "etag": "\"0x8D8B8A74D02F608\"",
+            "clientFileTime": "2019-12-13T04:42:50.6480000Z",
+            "size": 2036
+        },
+        {
+            "fileName": "brains/02335f11cb981160/requirementsXbin,savedgame",
+            "etag": "\"0x8D8B8A7323C727E\"",
+            "clientFileTime": "2019-12-13T04:42:49.4640000Z",
+            "size": 95
+        },
+        {
+            "fileName": "brains/02335f11cb981160/resourcesXbin,savedgame",
+            "etag": "\"0x8D8B8A71B281DA0\"",
+            "clientFileTime": "2019-12-13T04:42:50.1060000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/0241a24939f09c00/0241a24939f09c00Xast,savedgame",
+            "etag": "\"0x8D5239D59EAE230\"",
+            "clientFileTime": "2017-11-04T15:47:10.5730000Z",
+            "size": 1948
+        },
+        {
+            "fileName": "brains/0241a24939f09c00/iconXpng,savedgame",
+            "etag": "\"0x8D5239D5AD1A872\"",
+            "clientFileTime": "2017-11-04T15:47:11.0930000Z",
+            "size": 135529
+        },
+        {
+            "fileName": "brains/0241a24939f09c00/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D5239CE6A057D7\"",
+            "clientFileTime": "2017-11-04T15:47:09.3780000Z",
+            "size": 190
+        },
+        {
+            "fileName": "brains/0241a24939f09c00/objectsXhead,savedgame",
+            "etag": "\"0x8D5239D5E88182B\"",
+            "clientFileTime": "2017-11-04T15:47:09.9640000Z",
+            "size": 1425
+        },
+        {
+            "fileName": "brains/0241a24939f09c00/requirementsXbin,savedgame",
+            "etag": "\"0x8D5239D5CA0E30E\"",
+            "clientFileTime": "2017-11-04T15:47:08.7910000Z",
+            "size": 209
+        },
+        {
+            "fileName": "brains/0241a24939f09c00/resourcesXbin,savedgame",
+            "etag": "\"0x8D5239D0D86294F\"",
+            "clientFileTime": "2017-11-04T15:47:08.2150000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/0253b927e46a9718/0253b927e46a9718Xast,savedgame",
+            "etag": "\"0x8D5DDE7AA5181C8\"",
+            "clientFileTime": "2014-09-01T16:41:20.4290000Z",
+            "size": 1956
+        },
+        {
+            "fileName": "brains/0253b927e46a9718/iconXpng,savedgame",
+            "etag": "\"0x8D5DDE79DCA84F1\"",
+            "clientFileTime": "2014-09-01T16:41:20.4970000Z",
+            "size": 160540
+        },
+        {
+            "fileName": "brains/0253b927e46a9718/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D5DDE791395D49\"",
+            "clientFileTime": "2014-09-01T16:41:20.2180000Z",
+            "size": 138
+        },
+        {
+            "fileName": "brains/0253b927e46a9718/objectsXhead,savedgame",
+            "etag": "\"0x8D5DDE7850AE030\"",
+            "clientFileTime": "2014-09-01T16:41:20.3600000Z",
+            "size": 435
+        },
+        {
+            "fileName": "brains/0253b927e46a9718/requirementsXbin,savedgame",
+            "etag": "\"0x8D5DDE779FD0CF9\"",
+            "clientFileTime": "2014-09-01T16:41:18.9320000Z",
+            "size": 110
+        },
+        {
+            "fileName": "brains/0253b927e46a9718/resourcesXbin,savedgame",
+            "etag": "\"0x8D5DDE76DDBD93F\"",
+            "clientFileTime": "2014-09-01T16:41:20.2960000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/028df3d372690408/028df3d372690408Xast,savedgame",
+            "etag": "\"0x8D3313C047A2845\"",
+            "clientFileTime": "2014-09-01T16:48:45.9060000Z",
+            "size": 2004
+        },
+        {
+            "fileName": "brains/028df3d372690408/iconXpng,savedgame",
+            "etag": "\"0x8D3313C389CEB6B\"",
+            "clientFileTime": "2014-09-01T16:48:47.0140000Z",
+            "size": 107388
+        },
+        {
+            "fileName": "brains/028df3d372690408/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3313943ACFB1C\"",
+            "clientFileTime": "2014-09-01T16:48:41.4790000Z",
+            "size": 322
+        },
+        {
+            "fileName": "brains/028df3d372690408/objectsXhead,savedgame",
+            "etag": "\"0x8D3313C065E044A\"",
+            "clientFileTime": "2014-09-01T16:48:44.6120000Z",
+            "size": 1596
+        },
+        {
+            "fileName": "brains/028df3d372690408/requirementsXbin,savedgame",
+            "etag": "\"0x8D33138A2B35E00\"",
+            "clientFileTime": "2014-09-01T16:48:43.6380000Z",
+            "size": 141
+        },
+        {
+            "fileName": "brains/028df3d372690408/resourcesXbin,savedgame",
+            "etag": "\"0x8D33138A39C975A\"",
+            "clientFileTime": "2014-09-01T16:48:42.5310000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/02a73cf9af6b3f70/02a73cf9af6b3f70Xast,savedgame",
+            "etag": "\"0x8D3E219DEE96D91\"",
+            "clientFileTime": "2014-09-01T18:00:34.3460000Z",
+            "size": 1956
+        },
+        {
+            "fileName": "brains/02a73cf9af6b3f70/iconXpng,savedgame",
+            "etag": "\"0x8D3E21C67633DC9\"",
+            "clientFileTime": "2014-09-01T18:00:35.4070000Z",
+            "size": 117883
+        },
+        {
+            "fileName": "brains/02a73cf9af6b3f70/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3E21A6C703BA7\"",
+            "clientFileTime": "2014-09-01T18:00:30.6270000Z",
+            "size": 174
+        },
+        {
+            "fileName": "brains/02a73cf9af6b3f70/objectsXhead,savedgame",
+            "etag": "\"0x8D3E21C4F6D32A2\"",
+            "clientFileTime": "2014-09-01T18:00:32.9740000Z",
+            "size": 548
+        },
+        {
+            "fileName": "brains/02a73cf9af6b3f70/requirementsXbin,savedgame",
+            "etag": "\"0x8D3E21A6D44F39D\"",
+            "clientFileTime": "2014-09-01T18:00:31.6220000Z",
+            "size": 95
+        },
+        {
+            "fileName": "brains/02a73cf9af6b3f70/resourcesXbin,savedgame",
+            "etag": "\"0x8D3E21A7996F3DE\"",
+            "clientFileTime": "2014-09-01T18:00:29.4850000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/02be95bd6ebdde20/02be95bd6ebdde20Xast,savedgame",
+            "etag": "\"0x8D5269779D87E37\"",
+            "clientFileTime": "2017-11-08T10:45:28.2260000Z",
+            "size": 1944
+        },
+        {
+            "fileName": "brains/02be95bd6ebdde20/iconXpng,savedgame",
+            "etag": "\"0x8D52697B19F218C\"",
+            "clientFileTime": "2017-11-08T10:45:28.6910000Z",
+            "size": 150106
+        },
+        {
+            "fileName": "brains/02be95bd6ebdde20/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D526975A2C9655\"",
+            "clientFileTime": "2017-11-08T10:45:26.4560000Z",
+            "size": 168
+        },
+        {
+            "fileName": "brains/02be95bd6ebdde20/objectsXhead,savedgame",
+            "etag": "\"0x8D52697B58F944F\"",
+            "clientFileTime": "2017-11-08T10:45:27.6630000Z",
+            "size": 1077
+        },
+        {
+            "fileName": "brains/02be95bd6ebdde20/requirementsXbin,savedgame",
+            "etag": "\"0x8D52697B45BAF26\"",
+            "clientFileTime": "2017-11-08T10:45:25.8910000Z",
+            "size": 209
+        },
+        {
+            "fileName": "brains/02be95bd6ebdde20/resourcesXbin,savedgame",
+            "etag": "\"0x8D52697A24F4577\"",
+            "clientFileTime": "2017-11-08T10:45:27.0420000Z",
+            "size": 109
+        },
+        {
+            "fileName": "brains/02d76459255e7f54/02d76459255e7f54Xast,savedgame",
+            "etag": "\"0x8D3E21B0B056974\"",
+            "clientFileTime": "2014-09-01T17:48:59.7630000Z",
+            "size": 1944
+        },
+        {
+            "fileName": "brains/02d76459255e7f54/iconXpng,savedgame",
+            "etag": "\"0x8D3E21C5034CB0C\"",
+            "clientFileTime": "2014-09-01T17:49:00.7480000Z",
+            "size": 92616
+        },
+        {
+            "fileName": "brains/02d76459255e7f54/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3E21B0BCF99FD\"",
+            "clientFileTime": "2014-09-01T17:48:55.4560000Z",
+            "size": 166
+        },
+        {
+            "fileName": "brains/02d76459255e7f54/objectsXhead,savedgame",
+            "etag": "\"0x8D3E21B60B42219\"",
+            "clientFileTime": "2014-09-01T17:48:58.7670000Z",
+            "size": 380
+        },
+        {
+            "fileName": "brains/02d76459255e7f54/requirementsXbin,savedgame",
+            "etag": "\"0x8D3E21B617A5AED\"",
+            "clientFileTime": "2014-09-01T17:48:57.5390000Z",
+            "size": 95
+        },
+        {
+            "fileName": "brains/02d76459255e7f54/resourcesXbin,savedgame",
+            "etag": "\"0x8D3E21B6245C3D6\"",
+            "clientFileTime": "2014-09-01T17:48:56.4310000Z",
+            "size": 109
+        },
+        {
+            "fileName": "levels/10x40cre_4db1b8eeE6f7aE9a42E96f8Ed3d8936ea522/075000643Xlvl,savedgame",
+            "etag": "\"0x8D310F16EBF6FA6\"",
+            "clientFileTime": "2015-12-30T07:50:48.7790000Z",
+            "size": 1283384
+        },
+        {
+            "fileName": "levels/30boidfa_22f0e601Eb033E3149E9ff4E47baa74bb3ad/054248937Xlvl,savedgame",
+            "etag": "\"0x8D8B8A7056972B9\"",
+            "clientFileTime": "2019-12-13T05:42:49.7040000Z",
+            "size": 117114
+        },
+        {
+            "fileName": "levels/30boidfa_22f0e601Eb033E3149E9ff4E47baa74bb3ad/autosave045854139Xlvl,savedgame",
+            "etag": "\"0x8D8B8A6E56F19D0\"",
+            "clientFileTime": "2019-12-13T04:58:54.7670000Z",
+            "size": 117210
+        },
+        {
+            "fileName": "levels/52f43963E2386Efa44Ea877E40ed01cc43fc/autosave093728249Xlvl,savedgame",
+            "etag": "\"0x8DB22148CB3632D\"",
+            "clientFileTime": "2023-03-11T09:37:28.9550000Z",
+            "size": 135628
+        },
+        {
+            "fileName": "levels/a72f7933Eae69Ec940Eb1c8E8c14ee4b4f7a/autosave174903976Xlvl,savedgame",
+            "etag": "\"0x8D50FF3B5EDEBE4\"",
+            "clientFileTime": "2014-09-01T17:49:04.5820000Z",
+            "size": 113796
+        },
+        {
+            "fileName": "levels/aeterned_26f0e87aE541cE8a4aE899eEc7ee99a11764/074128378Xlvl,savedgame",
+            "etag": "\"0x8D303A27E294877\"",
+            "clientFileTime": "2015-12-11T07:41:52.1970000Z",
+            "size": 893140
+        },
+        {
+            "fileName": "levels/aeterned_26f0e87aE541cE8a4aE899eEc7ee99a11764/autosave173354804Xlvl,savedgame",
+            "etag": "\"0x8D310F1702D3C2E\"",
+            "clientFileTime": "2014-09-01T17:33:56.4640000Z",
+            "size": 893143
+        },
+        {
+            "fileName": "levels/ai_a63a39b0E0f4fEe44dEa0d7E6d1dd9c939a3/111100289Xlvl,savedgame",
+            "etag": "\"0x8D51AA09750C9F8\"",
+            "clientFileTime": "2017-10-23T11:11:01.9080000Z",
+            "size": 271148
+        },
+        {
+            "fileName": "levels/ai_a63a39b0E0f4fEe44dEa0d7E6d1dd9c939a3/autosave110813757Xlvl,savedgame",
+            "etag": "\"0x8D51AA08C991F0E\"",
+            "clientFileTime": "2017-10-23T11:08:15.3490000Z",
+            "size": 289153
+        },
+        {
+            "fileName": "levels/aitest2_9d555c74EcdccE4448E963fE570bee028f70/035409681Xlvl,savedgame",
+            "etag": "\"0x8D8B8A6D4356320\"",
+            "clientFileTime": "2019-12-13T03:54:10.6270000Z",
+            "size": 206525
+        },
+        {
+            "fileName": "levels/aitest2_9d555c74EcdccE4448E963fE570bee028f70/autosave044059425Xlvl,savedgame",
+            "etag": "\"0x8D8B8A6BE3447EC\"",
+            "clientFileTime": "2019-12-13T04:41:00.3090000Z",
+            "size": 206506
+        },
+        {
+            "fileName": "levels/anomalyt_8dacbed2E913dEa84fEb33aEd5ab247e8bb6/105238627Xlvl,savedgame",
+            "etag": "\"0x8D334668206A6A9\"",
+            "clientFileTime": "2016-02-13T10:54:08.8020000Z",
+            "size": 3059180
+        },
+        {
+            "fileName": "levels/anomalyt_8dacbed2E913dEa84fEb33aEd5ab247e8bb6/autosave163749916Xlvl,savedgame",
+            "etag": "\"0x8D522D98A295C11\"",
+            "clientFileTime": "2017-11-03T16:37:52.7380000Z",
+            "size": 3063673
+        },
+        {
+            "fileName": "levels/bman_ce124b13E6d35E404eE95bbE479cb908aa30/103935471Xlvl,savedgame",
+            "etag": "\"0x8D63D650908CC7E\"",
+            "clientFileTime": "2018-10-28T10:39:36.3870000Z",
+            "size": 199337
+        },
+        {
+            "fileName": "levels/bman_ce124b13E6d35E404eE95bbE479cb908aa30/autosave102513131Xlvl,savedgame",
+            "etag": "\"0x8D63D65026D497C\"",
+            "clientFileTime": "2018-10-28T10:25:14.0710000Z",
+            "size": 199011
+        },
+        {
+            "fileName": "levels/buttonde_c169d3a9Ed6afEa042E8f86Ef2fbfd23e923/154734405Xlvl,savedgame",
+            "etag": "\"0x8D5239D5BBB7CAF\"",
+            "clientFileTime": "2017-11-04T15:47:36.2330000Z",
+            "size": 462062
+        },
+        {
+            "fileName": "levels/buttonde_c169d3a9Ed6afEa042E8f86Ef2fbfd23e923/autosave104541484Xlvl,savedgame",
+            "etag": "\"0x8D52697B2DB6D16\"",
+            "clientFileTime": "2017-11-08T10:45:43.1710000Z",
+            "size": 475438
+        },
+        {
+            "fileName": "levels/characte_4c1f6464Ec003Ea34eEb3cfEd11071958b1a/061058428Xlvl,savedgame",
+            "etag": "\"0x8D314065661E806\"",
+            "clientFileTime": "2016-01-03T06:11:19.5600000Z",
+            "size": 644335
+        },
+        {
+            "fileName": "levels/characte_4c1f6464Ec003Ea34eEb3cfEd11071958b1a/autosave164910777Xlvl,savedgame",
+            "etag": "\"0x8D3E21C7BF307ED\"",
+            "clientFileTime": "2014-09-01T16:49:12.4420000Z",
+            "size": 644328
+        },
+        {
+            "fileName": "levels/conkersb_7d1499baEc403E1f46Eb798Eb6ce7f5b3b2a/autosave060343876Xlvl,savedgame",
+            "etag": "\"0x8D526821C8C04D2\"",
+            "clientFileTime": "2017-11-08T06:03:55.4920000Z",
+            "size": 7355278
+        },
+        {
+            "fileName": "levels/corupted_de459f03E7761E7245Ea797E6b3d476373e7/110317410Xlvl,savedgame",
+            "etag": "\"0x8D323DE658B123B\"",
+            "clientFileTime": "2016-01-19T11:03:19.4120000Z",
+            "size": 662360
+        },
+        {
+            "fileName": "levels/corupted_de459f03E7761E7245Ea797E6b3d476373e7/autosave110221559Xlvl,savedgame",
+            "etag": "\"0x8D323DEFFB29E83\"",
+            "clientFileTime": "2016-01-19T11:02:23.5630000Z",
+            "size": 662691
+        },
+        {
+            "fileName": "levels/credits_a3160befE8f0aE2c44E9374Eedd7987182b9/autosave130544119Xlvl,savedgame",
+            "etag": "\"0x8D3E220701A06C8\"",
+            "clientFileTime": "2016-09-21T13:05:48.5640000Z",
+            "size": 1561210
+        },
+        {
+            "fileName": "levels/ec68c8b5Ef171Ed54eE939bE9e8a82ddda07/autosave163622241Xlvl,savedgame",
+            "etag": "\"0x8D79F1E43AC0B80\"",
+            "clientFileTime": "2014-09-01T16:36:22.8290000Z",
+            "size": 117456
+        },
+        {
+            "fileName": "levels/emotes_bdff9176E1943E174fEa4f5Ec74edcff4fb8/125711406Xlvl,savedgame",
+            "etag": "\"0x8D53CAF6511AFB5\"",
+            "clientFileTime": "2017-12-06T12:57:11.7860000Z",
+            "size": 72458
+        },
+        {
+            "fileName": "levels/emptywor_81ae8b6eE48afE6e42E8d33Ea6321f962b7f/000007654Xlvl,savedgame",
+            "etag": "\"0x8D79F1E3DA2FF37\"",
+            "clientFileTime": "2014-09-02T00:00:08.5710000Z",
+            "size": 211184
+        },
+        {
+            "fileName": "levels/emptywor_81ae8b6eE48afE6e42E8d33Ea6321f962b7f/autosave235410103Xlvl,savedgame",
+            "etag": "\"0x8D79F1E36779A57\"",
+            "clientFileTime": "2014-09-01T23:54:10.9210000Z",
+            "size": 211187
+        },
+        {
+            "fileName": "levels/f65854deEf081E8f46Ea28bEcc2eb3aa7fa3/autosave071816052Xlvl,savedgame",
+            "etag": "\"0x8D50FF3989CD095\"",
+            "clientFileTime": "2014-09-02T07:18:18.3260000Z",
+            "size": 624265
+        },
+        {
+            "fileName": "levels/homealon_e53b69d8Ed384E5748Ea96fE24714d847a84/065325484Xlvl,savedgame",
+            "etag": "\"0x8D3140C437200A3\"",
+            "clientFileTime": "2016-01-03T06:54:04.4200000Z",
+            "size": 1506244
+        },
+        {
+            "fileName": "levels/homealon_e53b69d8Ed384E5748Ea96fE24714d847a84/autosave165632215Xlvl,savedgame",
+            "etag": "\"0x8D32EDFCE4BD3EB\"",
+            "clientFileTime": "2014-09-01T16:56:35.1370000Z",
+            "size": 1505375
+        },
+        {
+            "fileName": "levels/new_f73ce84fE6000Efc41Ea266Ea17c6263d81e/163646644Xlvl,savedgame",
+            "etag": "\"0x8D523A273FDF3CA\"",
+            "clientFileTime": "2017-11-04T16:36:48.7910000Z",
+            "size": 610773
+        },
+        {
+            "fileName": "levels/new_f73ce84fE6000Efc41Ea266Ea17c6263d81e/autosave163839165Xlvl,savedgame",
+            "etag": "\"0x8D5374733160384\"",
+            "clientFileTime": "2014-09-01T16:38:40.9220000Z",
+            "size": 612054
+        },
+        {
+            "fileName": "levels/ortal3_b5ed1f85E2036E984eE8c36E0a77d1eb037e/173915339Xlvl,savedgame",
+            "etag": "\"0x8D50FF3911412D5\"",
+            "clientFileTime": "2014-09-01T17:39:17.6230000Z",
+            "size": 533213
+        },
+        {
+            "fileName": "levels/ortal3_b5ed1f85E2036E984eE8c36E0a77d1eb037e/autosave162238564Xlvl,savedgame",
+            "etag": "\"0x8D50FF38949F62F\"",
+            "clientFileTime": "2014-09-01T16:22:41.1300000Z",
+            "size": 1753348
+        },
+        {
+            "fileName": "levels/peasantp_1f20b601E3fedE0946E849cE596522773d19/134446048Xlvl,savedgame",
+            "etag": "\"0x8D2FFD9CE592A13\"",
+            "clientFileTime": "2015-12-08T13:46:14.3590000Z",
+            "size": 3437937
+        },
+        {
+            "fileName": "levels/projectc_8a98e433E3333E1c44E9d3aEc271d55efede/autosave164703685Xlvl,savedgame",
+            "etag": "\"0x8D333CDD0556769\"",
+            "clientFileTime": "2016-02-12T16:47:05.1250000Z",
+            "size": 688823
+        },
+        {
+            "fileName": "levels/projectr_afa3eff0E2948E0042E8439E97fabd934f2b/074803080Xlvl,savedgame",
+            "etag": "\"0x8D391D2B8B92656\"",
+            "clientFileTime": "2016-06-11T07:48:12.3080000Z",
+            "size": 4460535
+        },
+        {
+            "fileName": "levels/projectr_afa3eff0E2948E0042E8439E97fabd934f2b/autosave172848951Xlvl,savedgame",
+            "etag": "\"0x8D3E21C77F87451\"",
+            "clientFileTime": "2014-09-01T17:28:58.0690000Z",
+            "size": 4460650
+        },
+        {
+            "fileName": "levels/projects_eb8231f8E909bE4847E9c9aEab559df78c00/autosave171727045Xlvl,savedgame",
+            "etag": "\"0x8D50FF3795A3FDC\"",
+            "clientFileTime": "2014-09-01T17:17:32.7100000Z",
+            "size": 3636496
+        },
+        {
+            "fileName": "levels/projectu_01c950bfEee4cE4340Eb16dEb6d18f0c2e8d/105731047Xlvl,savedgame",
+            "etag": "\"0x8D5DDE7624AD3A5\"",
+            "clientFileTime": "2018-03-04T10:57:31.4810000Z",
+            "size": 173652
+        },
+        {
+            "fileName": "levels/projectu_01c950bfEee4cE4340Eb16dEb6d18f0c2e8d/110017060Xlvl,savedgame",
+            "etag": "\"0x8D5DDE75399F1F9\"",
+            "clientFileTime": "2018-03-04T11:00:17.3450000Z",
+            "size": 115438
+        },
+        {
+            "fileName": "levels/projectu_01c950bfEee4cE4340Eb16dEb6d18f0c2e8d/autosave045625569Xlvl,savedgame",
+            "etag": "\"0x8D8B8A6A9FA2A77\"",
+            "clientFileTime": "2019-12-13T04:56:26.1630000Z",
+            "size": 115521
+        },
+        {
+            "fileName": "levels/rt_d0f5d47fE9534E774fE8253E37d3160f6c10/064705727Xlvl,savedgame",
+            "etag": "\"0x8D3313C214EB1B0\"",
+            "clientFileTime": "2016-01-28T06:47:08.4460000Z",
+            "size": 1330019
+        },
+        {
+            "fileName": "levels/rt_d0f5d47fE9534E774fE8253E37d3160f6c10/autosave170011179Xlvl,savedgame",
+            "etag": "\"0x8D3E21C7991B761\"",
+            "clientFileTime": "2014-09-01T17:00:13.6960000Z",
+            "size": 1331522
+        },
+        {
+            "fileName": "levels/soltaniw_1316195fE2540Ea248Ea6dcE88683b231738/190221367Xlvl,savedgame",
+            "etag": "\"0x8D3E21C78C515D0\"",
+            "clientFileTime": "2014-09-01T19:02:27.5790000Z",
+            "size": 2568554
+        },
+        {
+            "fileName": "levels/soltaniw_1fa1e98dEdbd2Eb64dE8ef9Eba488f80e3a7/165248525Xlvl,savedgame",
+            "etag": "\"0x8D79F1E30EABA2A\"",
+            "clientFileTime": "2014-09-01T16:52:49.2960000Z",
+            "size": 102069
+        },
+        {
+            "fileName": "levels/soltaniw_1fa1e98dEdbd2Eb64dE8ef9Eba488f80e3a7/autosave084741983Xlvl,savedgame",
+            "etag": "\"0x8DB22118CEA5CFB\"",
+            "clientFileTime": "2023-03-11T08:47:42.6160000Z",
+            "size": 102010
+        },
+        {
+            "fileName": "levels/soltaniw_54866b2aE12e0E194eEbd3fE6e5871bf8758/153532011Xlvl,savedgame",
+            "etag": "\"0x8D5374711B18716\"",
+            "clientFileTime": "2017-11-28T15:35:32.5330000Z",
+            "size": 25863
+        },
+        {
+            "fileName": "levels/soltaniw_54866b2aE12e0E194eEbd3fE6e5871bf8758/autosave153359662Xlvl,savedgame",
+            "etag": "\"0x8D53746FDD26F1B\"",
+            "clientFileTime": "2017-11-28T15:34:00.9050000Z",
+            "size": 25847
+        },
+        {
+            "fileName": "levels/soltaniw_5ed36ffeE4cf4E0144Eb447Ef7cd928a9013/161702091Xlvl,savedgame",
+            "etag": "\"0x8D3134395477A65\"",
+            "clientFileTime": "2014-09-01T16:17:02.8540000Z",
+            "size": 201026
+        },
+        {
+            "fileName": "levels/soltaniw_5ed36ffeE4cf4E0144Eb447Ef7cd928a9013/autosave161214516Xlvl,savedgame",
+            "etag": "\"0x8D3202A06862453\"",
+            "clientFileTime": "2014-09-01T16:12:15.3170000Z",
+            "size": 201097
+        },
+        {
+            "fileName": "levels/soltaniw_6196a364E468aEbf48E8c65E6cc4c40abe63/173120715Xlvl,savedgame",
+            "etag": "\"0x8D38FA1757308EC\"",
+            "clientFileTime": "2014-09-01T17:31:22.4940000Z",
+            "size": 748598
+        },
+        {
+            "fileName": "levels/soltaniw_6196a364E468aEbf48E8c65E6cc4c40abe63/autosave170911947Xlvl,savedgame",
+            "etag": "\"0x8D50FF35C4F3F93\"",
+            "clientFileTime": "2014-09-01T17:09:13.7820000Z",
+            "size": 629262
+        },
+        {
+            "fileName": "levels/soltaniw_a4c39704Ec03fE9849E8ca9E8c897d1248cb/172733667Xlvl,savedgame",
+            "etag": "\"0x8D3134399098C28\"",
+            "clientFileTime": "2014-09-01T17:27:39.5490000Z",
+            "size": 2753591
+        },
+        {
+            "fileName": "levels/soltaniw_a4c39704Ec03fE9849E8ca9E8c897d1248cb/autosave192401924Xlvl,savedgame",
+            "etag": "\"0x8D3134394589A4B\"",
+            "clientFileTime": "2014-09-01T19:24:07.8140000Z",
+            "size": 2769408
+        },
+        {
+            "fileName": "levels/soltaniw_c169d3a9Ed6afEa042E8f86Ef2fbfd23e923/161709532Xlvl,savedgame",
+            "etag": "\"0x8D5161167CB05A1\"",
+            "clientFileTime": "2017-10-17T16:17:11.6850000Z",
+            "size": 398798
+        },
+        {
+            "fileName": "levels/soltaniw_c9bf7badEecbfE924fEa502E3efef1062e09/152419449Xlvl,savedgame",
+            "etag": "\"0x8D528BAFCF0EF0C\"",
+            "clientFileTime": "2017-11-10T15:24:23.3910000Z",
+            "size": 1603663
+        },
+        {
+            "fileName": "levels/soltaniw_db57c5cfEd4abE6244E8694Ee24c04dc9920/160642797Xlvl,savedgame",
+            "etag": "\"0x8D5DDE7364529D1\"",
+            "clientFileTime": "2014-09-01T16:06:44.7300000Z",
+            "size": 735891
+        },
+        {
+            "fileName": "levels/soltaniw_db57c5cfEd4abE6244E8694Ee24c04dc9920/autosave203525688Xlvl,savedgame",
+            "etag": "\"0x8D5DDE715CF4D54\"",
+            "clientFileTime": "2014-09-01T20:35:28.2990000Z",
+            "size": 1075177
+        },
+        {
+            "fileName": "levels/soltaniw_e5f4ddcdE6425Eca49EafcdE7f7882dfb9d8/171700042Xlvl,savedgame",
+            "etag": "\"0x8D50FF34C4CBFED\"",
+            "clientFileTime": "2014-09-01T17:17:05.7420000Z",
+            "size": 2480019
+        },
+        {
+            "fileName": "levels/spacegun_d878a686E4daaE5147E893fEb49d03a62c4b/140026538Xlvl,savedgame",
+            "etag": "\"0x8D391C42F5DDA5B\"",
+            "clientFileTime": "2016-06-08T14:00:33.5940000Z",
+            "size": 3046281
+        },
+        {
+            "fileName": "levels/spacegun_d878a686E4daaE5147E893fEb49d03a62c4b/autosave162404832Xlvl,savedgame",
+            "etag": "\"0x8D522D91EDE74E1\"",
+            "clientFileTime": "2017-11-03T16:24:11.4920000Z",
+            "size": 3046658
+        },
+        {
+            "fileName": "levels/start_83c87fd7E727aEb04cEa2e6Ee0d85422a135/124536654Xlvl,savedgame",
+            "etag": "\"0x8D53CAF652B5855\"",
+            "clientFileTime": "2017-12-06T12:45:36.8720000Z",
+            "size": 166970
+        },
+        {
+            "fileName": "levels/start_83c87fd7E727aEb04cEa2e6Ee0d85422a135/autosave124423864Xlvl,savedgame",
+            "etag": "\"0x8D53CAF5FEED4D7\"",
+            "clientFileTime": "2017-12-06T12:44:24.1110000Z",
+            "size": 205158
+        },
+        {
+            "fileName": "levels/test_8e32646aE71e6E2b4dEa433E524b5606cc22/163147191Xlvl,savedgame",
+            "etag": "\"0x8D79F1E2A70A816\"",
+            "clientFileTime": "2014-09-01T16:31:47.7390000Z",
+            "size": 164370
+        },
+        {
+            "fileName": "levels/test_8e32646aE71e6E2b4dEa433E524b5606cc22/autosave162914147Xlvl,savedgame",
+            "etag": "\"0x8D79F1E24560B36\"",
+            "clientFileTime": "2014-09-01T16:29:14.7070000Z",
+            "size": 164409
+        },
+        {
+            "fileName": "levels/vicule_f974b258Ea2ddEc04aE970aE6e469ee4f7c1/171155657Xlvl,savedgame",
+            "etag": "\"0x8D5210A21F6828F\"",
+            "clientFileTime": "2014-09-01T17:11:56.0050000Z",
+            "size": 131110
+        },
+        {
+            "fileName": "levels/vicule_f974b258Ea2ddEc04aE970aE6e469ee4f7c1/autosave171039075Xlvl,savedgame",
+            "etag": "\"0x8D5210A197AD19F\"",
+            "clientFileTime": "2014-09-01T17:10:39.3560000Z",
+            "size": 115250
+        },
+        {
+            "fileName": "levels/yyyyyyyy_1062696eE3679E734fEb22dE9795ccb15b57/123726344Xlvl,savedgame",
+            "etag": "\"0x8D3E21D8814DD47\"",
+            "clientFileTime": "2016-09-21T12:37:27.3600000Z",
+            "size": 169629
+        },
+        {
+            "fileName": "levels/yyyyyyyy_1062696eE3679E734fEb22dE9795ccb15b57/autosave123653164Xlvl,savedgame",
+            "etag": "\"0x8D3E21D6E0A9130\"",
+            "clientFileTime": "2016-09-21T12:36:54.1060000Z",
+            "size": 169631
+        },
+        {
+            "fileName": "levels/zombiesi_a69bfc2fE9823E2e4aE9193E8ae1940eb946/024340668Xlvl,savedgame",
+            "etag": "\"0x8D8B8A675F5F7CC\"",
+            "clientFileTime": "2019-12-13T02:43:42.1370000Z",
+            "size": 534723
+        },
+        {
+            "fileName": "levels/zombiesi_a69bfc2fE9823E2e4aE9193E8ae1940eb946/autosave024043965Xlvl,savedgame",
+            "etag": "\"0x8D8B8A644144B0C\"",
+            "clientFileTime": "2019-12-13T02:40:45.4500000Z",
+            "size": 534724
+        },
+        {
+            "fileName": "licenseXxml,savedgame",
+            "etag": "\"0x8D3CC9EBE9ED025\"",
+            "clientFileTime": "2016-08-25T03:59:35.6010000Z",
+            "size": 25011
+        },
+        {
+            "fileName": "recordedugc/3014d64fcd8bbf16/3014d64fcd8bbf16Xast,savedgame",
+            "etag": "\"0x8D38FA19990A9ED\"",
+            "clientFileTime": "2014-09-01T17:28:54.4070000Z",
+            "size": 2116
+        },
+        {
+            "fileName": "recordedugc/3014d64fcd8bbf16/animXadf,savedgame",
+            "etag": "\"0x8D38FA19B45E30E\"",
+            "clientFileTime": "2014-09-01T17:28:50.8880000Z",
+            "size": 26646
+        },
+        {
+            "fileName": "recordedugc/3014d64fcd8bbf16/audioXsdf,savedgame",
+            "etag": "\"0x8D38FA19A669EFE\"",
+            "clientFileTime": "2014-09-01T17:28:52.3050000Z",
+            "size": 4158
+        },
+        {
+            "fileName": "recordedugc/3014d64fcd8bbf16/iconXpng,savedgame",
+            "etag": "\"0x8D38F9FF51AE30F\"",
+            "clientFileTime": "2014-09-01T17:28:55.2710000Z",
+            "size": 94200
+        },
+        {
+            "fileName": "recordedugc/3014d64fcd8bbf16/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D38FA181BC4B61\"",
+            "clientFileTime": "2014-09-01T17:28:53.5550000Z",
+            "size": 100
+        },
+        {
+            "fileName": "recordedugc/30315f5b186c3c14/30315f5b186c3c14Xast,savedgame",
+            "etag": "\"0x8D476B9C0E58272\"",
+            "clientFileTime": "2017-03-29T15:28:23.7290000Z",
+            "size": 2064
+        },
+        {
+            "fileName": "recordedugc/30315f5b186c3c14/animXadf,savedgame",
+            "etag": "\"0x8D476B9D894A31D\"",
+            "clientFileTime": "2017-03-29T15:28:19.5920000Z",
+            "size": 35590
+        },
+        {
+            "fileName": "recordedugc/30315f5b186c3c14/audioXsdf,savedgame",
+            "etag": "\"0x8D476B9D783D99F\"",
+            "clientFileTime": "2017-03-29T15:28:21.1820000Z",
+            "size": 22888
+        },
+        {
+            "fileName": "recordedugc/30315f5b186c3c14/iconXpng,savedgame",
+            "etag": "\"0x8D476B9D96EBEA1\"",
+            "clientFileTime": "2017-03-29T15:28:24.9240000Z",
+            "size": 84397
+        },
+        {
+            "fileName": "recordedugc/30315f5b186c3c14/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D476B9B59A9266\"",
+            "clientFileTime": "2017-03-29T15:28:17.7090000Z",
+            "size": 74
+        },
+        {
+            "fileName": "recordedugc/30410b4f258402f6/30410b4f258402f6Xast,savedgame",
+            "etag": "\"0x8D3313C6C662E0E\"",
+            "clientFileTime": "2016-01-26T10:44:03.4700000Z",
+            "size": 2076
+        },
+        {
+            "fileName": "recordedugc/30410b4f258402f6/animXadf,savedgame",
+            "etag": "\"0x8D3313C3A593898\"",
+            "clientFileTime": "2016-01-26T10:44:00.6250000Z",
+            "size": 9042
+        },
+        {
+            "fileName": "recordedugc/30410b4f258402f6/audioXsdf,savedgame",
+            "etag": "\"0x8D3313C69A63B51\"",
+            "clientFileTime": "2016-01-26T10:44:02.4730000Z",
+            "size": 3711
+        },
+        {
+            "fileName": "recordedugc/30410b4f258402f6/iconXpng,savedgame",
+            "etag": "\"0x8D3313C6D542382\"",
+            "clientFileTime": "2016-01-26T10:44:04.6100000Z",
+            "size": 176053
+        },
+        {
+            "fileName": "recordedugc/30410b4f258402f6/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D327AD6B9BF812\"",
+            "clientFileTime": "2016-01-26T10:44:01.6320000Z",
+            "size": 80
+        },
+        {
+            "fileName": "recordedugc/3044392132aca27e/3044392132aca27eXast,savedgame",
+            "etag": "\"0x8D476BA507C0EB7\"",
+            "clientFileTime": "2017-03-29T15:31:28.6780000Z",
+            "size": 2104
+        },
+        {
+            "fileName": "recordedugc/3044392132aca27e/animXadf,savedgame",
+            "etag": "\"0x8D476BA38CFC90E\"",
+            "clientFileTime": "2017-03-29T15:31:26.3130000Z",
+            "size": 170362
+        },
+        {
+            "fileName": "recordedugc/3044392132aca27e/audioXsdf,savedgame",
+            "etag": "\"0x8D476BA4F9A502D\"",
+            "clientFileTime": "2017-03-29T15:31:27.2820000Z",
+            "size": 204469
+        },
+        {
+            "fileName": "recordedugc/3044392132aca27e/iconXpng,savedgame",
+            "etag": "\"0x8D476BA5155B4E9\"",
+            "clientFileTime": "2017-03-29T15:31:29.6290000Z",
+            "size": 89128
+        },
+        {
+            "fileName": "recordedugc/3044392132aca27e/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D476BA2BB84AC2\"",
+            "clientFileTime": "2017-03-29T15:31:25.2120000Z",
+            "size": 94
+        },
+        {
+            "fileName": "recordedugc/30664a65c298a2ce/30664a65c298a2ceXast,savedgame",
+            "etag": "\"0x8D476BCC8A7087B\"",
+            "clientFileTime": "2017-03-29T15:49:11.1120000Z",
+            "size": 2116
+        },
+        {
+            "fileName": "recordedugc/30664a65c298a2ce/animXadf,savedgame",
+            "etag": "\"0x8D476BCB1E2EB99\"",
+            "clientFileTime": "2017-03-29T15:49:07.9130000Z",
+            "size": 19290
+        },
+        {
+            "fileName": "recordedugc/30664a65c298a2ce/audioXsdf,savedgame",
+            "etag": "\"0x8D476BCC987B559\"",
+            "clientFileTime": "2017-03-29T15:49:09.7730000Z",
+            "size": 18567
+        },
+        {
+            "fileName": "recordedugc/30664a65c298a2ce/iconXpng,savedgame",
+            "etag": "\"0x8D476BCCA629455\"",
+            "clientFileTime": "2017-03-29T15:49:12.2310000Z",
+            "size": 86711
+        },
+        {
+            "fileName": "recordedugc/30664a65c298a2ce/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D476BCA6EED57E\"",
+            "clientFileTime": "2017-03-29T15:49:08.8320000Z",
+            "size": 100
+        },
+        {
+            "fileName": "recordedugc/306bae8383fd64ac/306bae8383fd64acXast,savedgame",
+            "etag": "\"0x8D303A12ACB2E1E\"",
+            "clientFileTime": "2015-12-11T08:22:48.5530000Z",
+            "size": 2080
+        },
+        {
+            "fileName": "recordedugc/306bae8383fd64ac/animXadf,savedgame",
+            "etag": "\"0x8D303A1264E05C1\"",
+            "clientFileTime": "2015-12-11T08:22:47.6440000Z",
+            "size": 11194
+        },
+        {
+            "fileName": "recordedugc/306bae8383fd64ac/audioXsdf,savedgame",
+            "etag": "\"0x8D303A137D84933\"",
+            "clientFileTime": "2015-12-11T08:22:45.9290000Z",
+            "size": 3809
+        },
+        {
+            "fileName": "recordedugc/306bae8383fd64ac/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D303A10E29DD14\"",
+            "clientFileTime": "2015-12-11T08:22:46.8920000Z",
+            "size": 82
+        },
+        {
+            "fileName": "recordedugc/30766a0f1d6ba306/30766a0f1d6ba306Xast,savedgame",
+            "etag": "\"0x8D3133F961B4301\"",
+            "clientFileTime": "2014-09-01T16:24:07.2470000Z",
+            "size": 2084
+        },
+        {
+            "fileName": "recordedugc/30766a0f1d6ba306/animXadf,savedgame",
+            "etag": "\"0x8D3133F90038BC1\"",
+            "clientFileTime": "2014-09-01T16:24:06.2960000Z",
+            "size": 13086
+        },
+        {
+            "fileName": "recordedugc/30766a0f1d6ba306/audioXsdf,savedgame",
+            "etag": "\"0x8D3133F51387BF5\"",
+            "clientFileTime": "2014-09-01T16:24:05.3660000Z",
+            "size": 3805
+        },
+        {
+            "fileName": "recordedugc/30766a0f1d6ba306/iconXpng,savedgame",
+            "etag": "\"0x8D3133F4B4285C2\"",
+            "clientFileTime": "2014-09-01T16:24:08.6980000Z",
+            "size": 122308
+        },
+        {
+            "fileName": "recordedugc/30766a0f1d6ba306/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3133F42DF1672\"",
+            "clientFileTime": "2014-09-01T16:24:04.3370000Z",
+            "size": 84
+        },
+        {
+            "fileName": "recordedugc/3076f369d98b13fe/3076f369d98b13feXast,savedgame",
+            "etag": "\"0x8D323DF8E87B676\"",
+            "clientFileTime": "2014-09-01T16:58:03.8130000Z",
+            "size": 2096
+        },
+        {
+            "fileName": "recordedugc/3076f369d98b13fe/animXadf,savedgame",
+            "etag": "\"0x8D323DF8FB73291\"",
+            "clientFileTime": "2014-09-01T16:58:01.5890000Z",
+            "size": 6518
+        },
+        {
+            "fileName": "recordedugc/3076f369d98b13fe/audioXsdf,savedgame",
+            "etag": "\"0x8D323DEA6A698CF\"",
+            "clientFileTime": "2014-09-01T16:58:00.5920000Z",
+            "size": 3663
+        },
+        {
+            "fileName": "recordedugc/3076f369d98b13fe/iconXpng,savedgame",
+            "etag": "\"0x8D323DF92C7F355\"",
+            "clientFileTime": "2014-09-01T16:58:04.9870000Z",
+            "size": 95671
+        },
+        {
+            "fileName": "recordedugc/3076f369d98b13fe/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D323DE95F7D144\"",
+            "clientFileTime": "2014-09-01T16:58:02.6520000Z",
+            "size": 90
+        },
+        {
+            "fileName": "recordedugc/30c6204d3f856cce/30c6204d3f856cceXast,savedgame",
+            "etag": "\"0x8D328BCB73BF695\"",
+            "clientFileTime": "2016-01-26T10:32:57.3810000Z",
+            "size": 2076
+        },
+        {
+            "fileName": "recordedugc/30c6204d3f856cce/animXadf,savedgame",
+            "etag": "\"0x8D328BCAECD8F4D\"",
+            "clientFileTime": "2016-01-26T10:32:55.0470000Z",
+            "size": 8714
+        },
+        {
+            "fileName": "recordedugc/30c6204d3f856cce/audioXsdf,savedgame",
+            "etag": "\"0x8D328BCA48981A6\"",
+            "clientFileTime": "2016-01-26T10:32:55.8990000Z",
+            "size": 3713
+        },
+        {
+            "fileName": "recordedugc/30c6204d3f856cce/iconXpng,savedgame",
+            "etag": "\"0x8D328BC971C6F04\"",
+            "clientFileTime": "2016-01-26T10:32:58.5340000Z",
+            "size": 168436
+        },
+        {
+            "fileName": "recordedugc/30c6204d3f856cce/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D327AD69E52AA9\"",
+            "clientFileTime": "2016-01-26T10:32:54.1510000Z",
+            "size": 80
+        },
+        {
+            "fileName": "recordedugc/30ccb647ae8a9614/30ccb647ae8a9614Xast,savedgame",
+            "etag": "\"0x8D3E1E7BD8C4D5B\"",
+            "clientFileTime": "2016-08-31T07:01:54.2480000Z",
+            "size": 2088
+        },
+        {
+            "fileName": "recordedugc/30ccb647ae8a9614/animXadf,savedgame",
+            "etag": "\"0x8D3E1E7B79D33C2\"",
+            "clientFileTime": "2016-08-31T07:01:52.9080000Z",
+            "size": 11410
+        },
+        {
+            "fileName": "recordedugc/30ccb647ae8a9614/audioXsdf,savedgame",
+            "etag": "\"0x8D3E1E7B1949E54\"",
+            "clientFileTime": "2016-08-31T07:01:51.0270000Z",
+            "size": 3795
+        },
+        {
+            "fileName": "recordedugc/30ccb647ae8a9614/iconXpng,savedgame",
+            "etag": "\"0x8D3E1E7AB7D3B8D\"",
+            "clientFileTime": "2016-08-31T07:01:55.1560000Z",
+            "size": 79096
+        },
+        {
+            "fileName": "recordedugc/30ccb647ae8a9614/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3E1E7A134C987\"",
+            "clientFileTime": "2016-08-31T07:01:51.9890000Z",
+            "size": 86
+        },
+        {
+            "fileName": "recordedugc/30f21319669aa53e/30f21319669aa53eXast,savedgame",
+            "etag": "\"0x8D3014E98DCF1B0\"",
+            "clientFileTime": "2015-12-10T10:29:42.7990000Z",
+            "size": 2100
+        },
+        {
+            "fileName": "recordedugc/30f21319669aa53e/animXadf,savedgame",
+            "etag": "\"0x8D3014E9C2A9E19\"",
+            "clientFileTime": "2015-12-10T10:29:40.8510000Z",
+            "size": 13862
+        },
+        {
+            "fileName": "recordedugc/30f21319669aa53e/audioXsdf,savedgame",
+            "etag": "\"0x8D3014E84DCC738\"",
+            "clientFileTime": "2015-12-10T10:29:39.9870000Z",
+            "size": 7039
+        },
+        {
+            "fileName": "recordedugc/30f21319669aa53e/iconXpng,savedgame",
+            "etag": "\"0x8D3014E9A83DB75\"",
+            "clientFileTime": "2015-12-10T10:29:43.6390000Z",
+            "size": 103172
+        },
+        {
+            "fileName": "recordedugc/30f21319669aa53e/localization/stringtables/enEus/enEusXstr,savedgame",
+            "etag": "\"0x8D3014E97B9AF74\"",
+            "clientFileTime": "2015-12-10T10:29:41.8250000Z",
+            "size": 92
+        },
+        {
+            "fileName": "savedgames/acamp17815417551357970416Xtxt,savedgame",
+            "etag": "\"0x8D53746E51DB331\"",
+            "clientFileTime": "2017-11-11T16:55:31.9770000Z",
+            "size": 591
+        },
+        {
+            "fileName": "savedgames/camp678ce625Edfe6E1d4aE8433Ed220ccb6af90Xtxt,savedgame",
+            "etag": "\"0x8D3313C768EC599\"",
+            "clientFileTime": "2016-02-09T09:58:47.5490000Z",
+            "size": 494
+        },
+        {
+            "fileName": "savedgames/camp68859174Ea482E054cE8bc6E9c227dde59acXtxt,savedgame",
+            "etag": "\"0x8D2FFD49F4BC69B\"",
+            "clientFileTime": "2015-12-08T13:27:08.1160000Z",
+            "size": 415
+        },
+        {
+            "fileName": "savedgames/camp8a98e433E3333E1c44E9d3aEc271d55efedeXtxt,savedgame",
+            "etag": "\"0x8D51AA084697E46\"",
+            "clientFileTime": "2017-10-23T10:02:32.2310000Z",
+            "size": 566
+        },
+        {
+            "fileName": "savedgames/campafa3eff0E2948E0042E8439E97fabd934f2bXtxt,savedgame",
+            "etag": "\"0x8D53C044288BAEB\"",
+            "clientFileTime": "2014-09-01T16:55:53.4820000Z",
+            "size": 432
+        },
+        {
+            "fileName": "savedgames/campeb8231f8E909bE4847E9c9aEab559df78c00Xtxt,savedgame",
+            "etag": "\"0x8D32D973DA5097B\"",
+            "clientFileTime": "2014-09-01T16:39:58.5610000Z",
+            "size": 488
+        },
+        {
+            "fileName": "signatureXxml,savedgame",
+            "etag": "\"0x8D3CC9ECF592356\"",
+            "clientFileTime": "2016-08-25T03:59:34.6710000Z",
+            "size": 3173
+        },
+        {
+            "fileName": "xboxoneappusersettings,savedgame",
+            "etag": "\"0x8D8B8A61BBB72F4\"",
+            "clientFileTime": "2019-12-13T03:44:18.7290000Z",
+            "size": 4410
+        }
+    ],
+    "pagingInfo": {
+        "totalItems": 237,
+        "continuationToken": null
+    }
+}

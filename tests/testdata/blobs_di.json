@@ -1,0 +1,14 @@
+{
+  "blobs": [
+    {
+      "fileName": "root,savedgame",
+      "etag": "\"0x8DD5C5F48F6A721\"",
+      "clientFileTime": "2025-03-06T03:30:37.310000Z",
+      "size": 654196
+    }
+  ],
+  "pagingInfo": {
+    "totalItems": 1,
+    "continuationToken": null
+  }
+}
