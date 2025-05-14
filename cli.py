@@ -34,29 +34,32 @@ async def main():
         download_dir="downloads"
     )
 
-    # Generate auth URL
-    auth_url = await xbox_manager.generate_auth_url()
-    print("\nPlease authenticate with Xbox Live:")
-    print(f"1. Open this URL in your browser: {auth_url}")
-    print("2. Sign in with your Xbox account")
-    print("3. Copy the entire URL from your browser's address bar after being redirected")
-    
-    # Get auth code from user
-    auth_code = input("\nPaste the redirect URL here: ").strip()
+    token_data = xbox_manager.user_tokens_data.root.get("cli_user")
 
-    auth_code = parse_qs(urlparse(auth_code).query).get('code', [None])[0]
-    
-    if not auth_code:
-        print("❌ Could not extract code from the URL. Please ensure you copied the entire redirect URL.")
-        return
+    if not token_data or not token_data.xsts_token or not token_data.xsts_token.is_valid():
+        # Generate auth URL
+        auth_url = await xbox_manager.generate_auth_url()
+        print("\nPlease authenticate with Xbox Live:")
+        print(f"1. Open this URL in your browser: {auth_url}")
+        print("2. Sign in with your Xbox account")
+        print("3. Copy the entire URL from your browser's address bar after being redirected")
+        
+        # Get auth code from user
+        auth_code = input("\nPaste the redirect URL here: ").strip()
 
-    # Process authentication
-    print("\n⏳ Processing authentication...")
-    if not await xbox_manager.process_auth_code(auth_code, "cli_user"):
-        print("❌ Processing auth code failed.")
-        return
+        auth_code = parse_qs(urlparse(auth_code).query).get('code', [None])[0]
+        
+        if not auth_code:
+            print("❌ Could not extract code from the URL. Please ensure you copied the entire redirect URL.")
+            return
 
-    print("✅ Authenticated")
+        # Process authentication
+        print("\n⏳ Processing authentication...")
+        if not await xbox_manager.process_auth_code(auth_code, "cli_user"):
+            print("❌ Processing auth code failed.")
+            return
+
+        print("✅ Authenticated")
 
     # Select game version
     print("\nSelect game version:")
