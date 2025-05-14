@@ -197,14 +197,15 @@ class TitleStorageContext:
             if not len(res):
                 logger.error(f"Failed parsing file {filepath} with filter: {self.jsonpath_expr}")
                 continue
+
+            normalized_filename = blob_meta.normalized_filepath()
             
             if self.save_method == SaveMethod.AtomFilename:
                 # Use the atom's key as filename for saving locally
                 for a in res:
                     local_filename = str(a.path)
                     remote_filename = a.value
-                    local_filepath = download_dir.joinpath(local_filename)
-
+                    local_filepath = download_dir.joinpath(normalized_filename, local_filename)
                     logger.debug(f"Adding {remote_filename} -> {local_filepath} to queue")
                     to_download.append((remote_filename, local_filepath))
             
@@ -212,8 +213,7 @@ class TitleStorageContext:
                 # Use the fileName from BlobMetadata for saving locally
                 assert len(res) == 1, "Save-method 'BlobFilename' only expects a single remote filepath!"
                 remote_filename = res[0].value
-                local_filename = blob_meta.normalized_filepath()
-                local_filepath = download_dir.joinpath(local_filename)
+                local_filepath = download_dir.joinpath(normalized_filename)
                 to_download.append((remote_filename, local_filepath))
             else:
                 raise Exception(f"Unhandled save-method: {self.save_method}")

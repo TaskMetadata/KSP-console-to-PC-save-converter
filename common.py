@@ -10,8 +10,8 @@ class GameMetadata(BaseModel):
     title_id: int
     scid: str
     pfn: str
-    jsonpath_filter: str
-    save_method: SaveMethod
+    jsonpath_filter: str = "atoms.*"
+    save_method: SaveMethod = SaveMethod.AtomFilename
 
 class GameMetadataCollection(RootModel):
     root: Dict[str, GameMetadata]
