@@ -217,7 +217,7 @@ class GameVersionSelect(discord.ui.Select):
                 game_pfn,
             )
         except Exception as e:
-            logger.exception(f"get_titlestorage_context: Failed with error: {e}")
+            logger.error(f"get_titlestorage_context: Failed with error: {e}")
             await self.view.interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
             return
 
@@ -336,7 +336,7 @@ if ALLOW_CUSTOM_FETCH:
                 pfn,
             )
         except Exception as e:
-            logger.exception(f"get_titlestorage_context: Failed with error: {e}")
+            logger.error(f"get_titlestorage_context: Failed with error: {e}")
             await interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
             return
 
@@ -407,8 +407,7 @@ if ALLOW_CUSTOM_FETCH:
                         f"**Systems:** {', '.join(game_info.systems)}\n"
                         f"**SCID:** `{game_info.service_config_id}`\n"
                         f"**PFN:** `{game_info.pfn}`\n\n"
-                        f"To download saves, use:\n"
-                        f"`/fetchcustom scid:{game_info.service_config_id} pfn:{game_info.pfn}`"
+                        f"Click the button below to copy the command"
                     )
                     embed.add_field(
                         name=game_info.name,
@@ -416,7 +415,31 @@ if ALLOW_CUSTOM_FETCH:
                         inline=False
                     )
 
-                await interaction.followup.send(embed=embed)
+                # Create a view with a button for each game
+                view = discord.ui.View()
+                for game in data["items"]:
+                    game_info = DboxGameResponse.model_validate(game)
+                    button = discord.ui.Button(
+                        label=f"Download saves for {game_info.name}",
+                        custom_id=f"{game_info.service_config_id}",
+                        style=discord.ButtonStyle.primary
+                    )
+                    
+                    async def button_callback(interaction: discord.Interaction, scid=game_info.service_config_id, pfn=game_info.pfn):
+                        # Get the command from the tree
+                        command = bot.tree.get_command("fetchcustom")
+                        if command:
+                            # Create a new interaction context
+                            # ctx = await bot.get_application_context(interaction)
+                            # Execute the command
+                            await command.callback(interaction, scid=scid, pfn=pfn)
+                        else:
+                            await interaction.response.send_message("❌ Command not found", ephemeral=True)
+                    
+                    button.callback = button_callback
+                    view.add_item(button)
+
+                await interaction.followup.send(embed=embed, view=view)
 
         except Exception as e:
             logger.exception(f"search_command: Failed with error: {e}")
