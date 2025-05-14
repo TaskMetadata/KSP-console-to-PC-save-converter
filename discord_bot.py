@@ -88,8 +88,16 @@ async def authenticate_command(interaction: discord.Interaction):
         return
 
     await dm_channel.send("⏳ Processing authentication...")
-    if not await xbox_manager.process_auth_code(auth_code, str(interaction.user.id)):
+
+    try:
+        success = await xbox_manager.process_auth_code(auth_code, str(interaction.user.id))
+    except Exception as e:
+        logger.exception(f"process_auth_code: Failed with error: {e}")
+        success = False
+
+    if not success:
         await dm_channel.send(f"❌ Failed to process authentication. Contact an admin for assistance.")
+        return
 
     await dm_channel.send("✅ Success! You can now use `/getsave`.")
 
@@ -148,14 +156,25 @@ class GameVersionSelect(discord.ui.Select):
             logger.warning(f"Error disabling select menu in view: {e}")
 
         # Download save files
-        dl_context = await xbox_manager.get_titlestorage_context(
-            str(self.view.interaction.user.id),
-            game_scid,
-            game_pfn,
-        )
+        try:
+            dl_context = await xbox_manager.get_titlestorage_context(
+                str(self.view.interaction.user.id),
+                game_scid,
+                game_pfn,
+            )
+        except Exception as e:
+            logger.exception(f"get_titlestorage_context: Failed with error: {e}")
+            await self.view.interaction.followup.send("❌ Getting authenticated context failed. Did you authentica successfully?")
+            return
 
-        res = await dl_context.download_save_files()
-        if not res:
+        success = True
+        try:
+            res = await dl_context.download_save_files()
+        except Exception as e:
+            logger.exception(f"download_save_files: Failed with error: {e}")
+            success = False
+
+        if not res or not success:
             await self.view.interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
             return
 
