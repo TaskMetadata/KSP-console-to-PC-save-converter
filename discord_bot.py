@@ -195,7 +195,7 @@ class GameVersionSelect(discord.ui.Select):
         )
 
     async def callback(self, interaction: discord.Interaction):
-        await interaction.response.defer(thinking=True, ephemeral=False)
+        await interaction.response.send_message("Please wait a bit...")
         game_meta = games[self.values[0]]
         game_scid = game_meta.scid
         game_pfn = game_meta.pfn
@@ -246,7 +246,7 @@ class GameVersionSelect(discord.ui.Select):
         try:
             await self.view.interaction.followup.send(
                 file=discord.File(zip_filepath),
-                content=f"✅ Savegame downlaoded successfully, Enjoy!"
+                content=f"✅ Savegame downloaded successfully, Enjoy!"
             )
         finally:
             # Clean up files after sending
