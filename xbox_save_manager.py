@@ -409,8 +409,14 @@ class XboxSaveManager:
             return None
 
         auth_mgr, session = auth_session_tuple
-        save_method = self.games_meta.get(pfn).save_method
-        jsonpath_expr = self.jsonpath_exprs.get(pfn)
+        if pfn in self.games_meta:
+            # Title configured via games.json
+            save_method = self.games_meta.get(pfn).save_method
+            jsonpath_expr = self.jsonpath_exprs.get(pfn)
+        else:
+            logger.warning("Using default values, as game was not configured via games.json")
+            save_method = SaveMethod.AtomFilename
+            jsonpath_expr = jsonpath_ng.parse("atoms.*")
 
         return TitleStorageContext(
             user_id=user_id,

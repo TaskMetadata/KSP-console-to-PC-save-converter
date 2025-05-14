@@ -73,6 +73,7 @@ async def on_guild_join(guild):
                 value=(
                     "`/authenticate` - Start the Xbox Live authentication process\n"
                     "`/getsave` - Download your Xbox game saves\n"
+                    "`/fetchcustom scid:<ServiceConfigurationId> pfn:<PackageFamilyName>` - Fetch saves for arbitrary game\n"
                     "`/help` - Show this help message"
                 ),
                 inline=False
@@ -220,7 +221,7 @@ class GameVersionSelect(discord.ui.Select):
             logger.exception(f"download_save_files: Failed with error: {e}")
             success = False
 
-        if not res or not success:
+        if not success:
             await self.view.interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
             return
 
@@ -300,6 +301,49 @@ async def help_command(interaction: discord.Interaction):
     )
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
+
+@bot.tree.command(name="fetchcustom", description="Download Xbox save for a custom game using SCID and PFN.")
+async def fetch_custom_command(
+    interaction: discord.Interaction,
+    scid: str,
+    pfn: str
+):
+    """Start the save file download process for a custom game."""
+    await interaction.response.defer(thinking=True, ephemeral=False)
+
+    # Download save files
+    try:
+        dl_context = await xbox_manager.get_titlestorage_context(
+            str(interaction.user.id),
+            scid,
+            pfn,
+        )
+    except Exception as e:
+        logger.exception(f"get_titlestorage_context: Failed with error: {e}")
+        await interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
+        return
+
+    success = True
+    try:
+        res = await dl_context.download_save_files()
+    except Exception as e:
+        logger.exception(f"download_save_files: Failed with error: {e}")
+        success = False
+
+    if not success:
+        await interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
+        return
+
+    download_dir, zip_filepath = res
+
+    try:
+        await interaction.followup.send(
+            file=discord.File(zip_filepath),
+            content=f"✅ Savegame downloaded successfully, Enjoy!"
+        )
+    finally:
+        # Clean up files after sending
+        await dl_context.cleanup_files(download_dir)
 
 if __name__ == "__main__":
     if not all([DISCORD_BOT_TOKEN, XBOX_CLIENT_ID, REDIRECT_URI]):
