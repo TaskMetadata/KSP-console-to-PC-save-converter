@@ -405,8 +405,7 @@ class XboxSaveManager:
     async def get_titlestorage_context(self, user_id: str, scid: str, pfn: str) -> TitleStorageContext:
         auth_session_tuple = await self.get_auth_manager_and_session(user_id)
         if not auth_session_tuple:
-            logger.warning("Failed to get auth manager and session")
-            return None
+            raise Exception("Failed to get auth manager and session")
 
         auth_mgr, session = auth_session_tuple
         if pfn in self.games_meta:
