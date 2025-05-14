@@ -22,6 +22,9 @@ XBOX_CLIENT_ID = os.getenv("XBOX_CLIENT_ID")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 ALLOW_CUSTOM_FETCH = os.getenv("ALLOW_CUSTOM_FETCH")
 
+if ALLOW_CUSTOM_FETCH:
+    logger.info("[NOTE] Custom fetch is enabled via env")
+
 # Initialize bot with required intents
 intents = discord.Intents()
 intents.message_content = True

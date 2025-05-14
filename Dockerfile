@@ -38,8 +38,8 @@ COPY --from=builder /app /app
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
-COPY games.json /app/
-COPY .env /app/
+# Copy games.json from current directory into app's working directory
+COPY games.json.sample /app/games.json
 
 # Run the FastAPI application by default
 CMD ["xbox-savegame-discord_bot"]
