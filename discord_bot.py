@@ -18,6 +18,7 @@ load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 XBOX_CLIENT_ID = os.getenv("XBOX_CLIENT_ID")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
+ALLOW_CUSTOM_FETCH = os.getenv("ALLOW_CUSTOM_FETCH")
 
 # Initialize bot with required intents
 intents = discord.Intents()
@@ -68,14 +69,16 @@ async def on_guild_join(guild):
                 color=discord.Color.blue()
             )
             
+            command_list = ""
+            command_list += "`/authenticate` - Start the Xbox Live authentication process\n"
+            command_list += "`/getsave` - Download your Xbox game saves\n"
+            if ALLOW_CUSTOM_FETCH:
+                command_list += "`/fetchcustom scid:<ServiceConfigurationId> pfn:<PackageFamilyName>` - Fetch saves for arbitrary game\n"
+            command_list += "`/help` - Show this help message"
+
             embed.add_field(
                 name="📝 Available Commands",
-                value=(
-                    "`/authenticate` - Start the Xbox Live authentication process\n"
-                    "`/getsave` - Download your Xbox game saves\n"
-                    "`/fetchcustom scid:<ServiceConfigurationId> pfn:<PackageFamilyName>` - Fetch saves for arbitrary game\n"
-                    "`/help` - Show this help message"
-                ),
+                value=command_list,
                 inline=False
             )
             
@@ -302,48 +305,49 @@ async def help_command(interaction: discord.Interaction):
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
-@bot.tree.command(name="fetchcustom", description="Download Xbox save for a custom game using SCID and PFN.")
-async def fetch_custom_command(
-    interaction: discord.Interaction,
-    scid: str,
-    pfn: str
-):
-    """Start the save file download process for a custom game."""
-    await interaction.response.defer(thinking=True, ephemeral=False)
+if ALLOW_CUSTOM_FETCH:
+    @bot.tree.command(name="fetchcustom", description="Download Xbox save for a custom game using SCID and PFN.", )
+    async def fetch_custom_command(
+        interaction: discord.Interaction,
+        scid: str,
+        pfn: str
+    ):
+        """Start the save file download process for a custom game."""
+        await interaction.response.defer(thinking=True, ephemeral=False)
 
-    # Download save files
-    try:
-        dl_context = await xbox_manager.get_titlestorage_context(
-            str(interaction.user.id),
-            scid,
-            pfn,
-        )
-    except Exception as e:
-        logger.exception(f"get_titlestorage_context: Failed with error: {e}")
-        await interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
-        return
+        # Download save files
+        try:
+            dl_context = await xbox_manager.get_titlestorage_context(
+                str(interaction.user.id),
+                scid,
+                pfn,
+            )
+        except Exception as e:
+            logger.exception(f"get_titlestorage_context: Failed with error: {e}")
+            await interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
+            return
 
-    success = True
-    try:
-        res = await dl_context.download_save_files()
-    except Exception as e:
-        logger.exception(f"download_save_files: Failed with error: {e}")
-        success = False
+        success = True
+        try:
+            res = await dl_context.download_save_files()
+        except Exception as e:
+            logger.exception(f"download_save_files: Failed with error: {e}")
+            success = False
 
-    if not success:
-        await interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
-        return
+        if not success:
+            await interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
+            return
 
-    download_dir, zip_filepath = res
+        download_dir, zip_filepath = res
 
-    try:
-        await interaction.followup.send(
-            file=discord.File(zip_filepath),
-            content=f"✅ Savegame downloaded successfully, Enjoy!"
-        )
-    finally:
-        # Clean up files after sending
-        await dl_context.cleanup_files(download_dir)
+        try:
+            await interaction.followup.send(
+                file=discord.File(zip_filepath),
+                content=f"✅ Savegame downloaded successfully, Enjoy!"
+            )
+        finally:
+            # Clean up files after sending
+            await dl_context.cleanup_files(download_dir)
 
 if __name__ == "__main__":
     if not all([DISCORD_BOT_TOKEN, XBOX_CLIENT_ID, REDIRECT_URI]):
