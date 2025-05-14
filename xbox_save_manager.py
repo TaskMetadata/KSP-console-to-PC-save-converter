@@ -93,7 +93,7 @@ class TitleStorageContext:
             resp = await self.session.send_signed("GET", download_url, headers=self.common_headers, params=params)
             tmp = BlobsResponse.model_validate_json(resp.content)
             # Append blobs to initial response object, overwrite pagingInfo with current version
-            blobs_response.blobs.append(tmp.blobs)
+            blobs_response.blobs.extend(tmp.blobs)
             blobs_response.pagingInfo = tmp.pagingInfo
 
         return blobs_response
