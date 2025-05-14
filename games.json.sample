@@ -3,24 +3,28 @@
         "title_id": 1480659480,
         "scid": "99330100-8230-4304-8448-b7b80ffcf70b",
         "pfn": "DisneyConsumerProductsand.DisneyInfinityRevolution_jrvsvx228t8wp",
-        "jsonpath_filter": "atoms.*"
+        "jsonpath_filter": "atoms.*",
+        "save_method": "atom_filename"
     },
     "Disney Infinity 3.0": {
         "title_id": 1480659481,
         "scid": "7dd70100-ef4f-47b7-bcfb-0e6a09230e16",
         "pfn": "DisneyConsumerProductsand.Infinity3_jrvsvx228t8wp",
-        "jsonpath_filter": "atoms.*"
+        "jsonpath_filter": "atoms.*",
+        "save_method": "atom_filename"
     },
     "Project Spark": {
         "title_id": 1624350228,
         "scid": "d3d00100-7976-472f-a3f7-bc1760d19e14",
         "pfn": "Microsoft.ProjectSpark-Dakota_8wekyb3d8bbwe",
-        "jsonpath_filter": "atoms.Data"
+        "jsonpath_filter": "atoms.Data",
+        "save_method": "blob_filename"
     },
     "Minecraft: Xbox One Edition": {
         "title_id": 345903534,
         "scid": "05c20100-6e60-45d5-878a-4903149e11ae",
         "pfn": "Microsoft.ArthurProduct_8wekyb3d8bbwe",
-        "jsonpath_filter": "atoms.OPTIONDATA"
+        "jsonpath_filter": "atoms.OPTIONDATA",
+        "save_method": "blob_filename"
     }
 }
