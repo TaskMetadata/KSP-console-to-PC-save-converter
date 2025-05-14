@@ -6,6 +6,7 @@ import logging
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs
 import httpx
+import random
 
 from .xbox_save_manager import XboxSaveManager
 from .common import load_games_collection
@@ -423,7 +424,7 @@ if ALLOW_CUSTOM_FETCH:
                     game_info = DboxGameResponse.model_validate(game)
                     button = discord.ui.Button(
                         label=f"Download saves for {game_info.name}",
-                        custom_id=f"{game_info.service_config_id}",
+                        custom_id=f"{game_info.title_id}_{random.randint(0, 9999)}",
                         style=discord.ButtonStyle.primary
                     )
                     
