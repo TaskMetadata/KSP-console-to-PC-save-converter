@@ -1,6 +1,5 @@
 import discord
 import asyncio
-# from discord import app_commands
 from discord.ext import commands
 import os
 import logging
@@ -20,9 +19,11 @@ DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 XBOX_CLIENT_ID = os.getenv("XBOX_CLIENT_ID")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
-# Initialize bot
-intents = discord.Intents.default()
+# Initialize bot with required intents
+intents = discord.Intents()
 intents.message_content = True
+intents.guilds = True
+#intents.members = True  # Required for some interactions
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Initialize XboxSaveManager
@@ -39,6 +40,7 @@ games_list = list(games.root.items())
 @bot.event
 async def on_ready():
     logger.info(f"Bot logged in as {bot.user.name} (ID: {bot.user.id})")
+
     if not os.path.exists("downloads"):
         os.makedirs("downloads")
     try:
@@ -47,6 +49,50 @@ async def on_ready():
     except Exception as e:
         logger.error(f"Error syncing slash commands: {e}")
     logger.info("------")
+
+@bot.event
+async def on_guild_join(guild):
+    """Send a welcome message when the bot joins a new server."""
+    try:
+        # Find the first channel where the bot can send messages
+        welcome_channel = None
+        for channel in guild.text_channels:
+            if channel.permissions_for(guild.me).send_messages:
+                welcome_channel = channel
+                break
+        
+        if welcome_channel:
+            embed = discord.Embed(
+                title="🎮 Xbox Save Manager Bot",
+                description="Thanks for adding me to your server! I can help you download your Xbox game saves.",
+                color=discord.Color.blue()
+            )
+            
+            embed.add_field(
+                name="📝 Available Commands",
+                value=(
+                    "`/authenticate` - Start the Xbox Live authentication process\n"
+                    "`/getsave` - Download your Xbox game saves\n"
+                    "`/help` - Show this help message"
+                ),
+                inline=False
+            )
+            
+            embed.add_field(
+                name="⚠️ Important Notes",
+                value=(
+                    "• You need to authenticate with Xbox Live first using `/authenticate`\n"
+                    "• Make sure you've played the game on Xbox and your saves are synced\n"
+                    "• The bot will DM you during the authentication process"
+                ),
+                inline=False
+            )
+            
+            embed.set_footer(text="For support, contact the server administrator")
+            
+            await welcome_channel.send(embed=embed)
+    except Exception as e:
+        logger.error(f"Failed to send welcome message to guild {guild.name}: {e}")
 
 @bot.tree.command(name="authenticate")
 async def authenticate_command(interaction: discord.Interaction):
@@ -205,6 +251,55 @@ async def get_save_command(interaction: discord.Interaction):
         view=view,
         ephemeral=False
     )
+
+@bot.tree.command(name="help", description="Show information about the bot and its commands")
+async def help_command(interaction: discord.Interaction):
+    """Show help information about the bot."""
+    embed = discord.Embed(
+        title="🎮 Xbox Save Manager Bot Help",
+        description="I can help you download your Xbox game saves. Here's how to use me:",
+        color=discord.Color.blue()
+    )
+    
+    embed.add_field(
+        name="1️⃣ Authentication",
+        value=(
+            "First, you need to authenticate with Xbox Live:\n"
+            "• Use `/authenticate` to start the process\n"
+            "• Follow the instructions in your DMs\n"
+            "• You only need to do this once"
+        ),
+        inline=False
+    )
+    
+    embed.add_field(
+        name="2️⃣ Downloading Saves",
+        value=(
+            "To download your game saves:\n"
+            "• Use `/getsave` to start the process\n"
+            "• Select your game from the dropdown menu\n"
+            "• The bot will download and send your saves"
+        ),
+        inline=False
+    )
+    
+    embed.add_field(
+        name="⚠️ Requirements",
+        value=(
+            "• You must have played the game on Xbox\n"
+            "• Your saves must be synced to Xbox Cloud\n"
+            "• You need to complete authentication first"
+        ),
+        inline=False
+    )
+    
+    embed.add_field(
+        name="❓ Need Help?",
+        value="If you encounter any issues, please contact the server administrator.",
+        inline=False
+    )
+    
+    await interaction.response.send_message(embed=embed, ephemeral=True)
 
 if __name__ == "__main__":
     if not all([DISCORD_BOT_TOKEN, XBOX_CLIENT_ID, REDIRECT_URI]):
