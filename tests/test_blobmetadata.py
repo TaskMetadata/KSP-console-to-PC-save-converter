@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 from datetime import datetime
-from models import BlobMetadata, SavegameBlobType
+from xbox_savegame_downloader.models import BlobMetadata, SavegameBlobType
 
 @pytest.mark.parametrize("input_str,expected", [
     ("/assemblies/0133f6681e6df707/objectsXass,savedgame", "assemblies/0133f6681e6df707/objects.ass"),
@@ -16,7 +16,7 @@ def test_filename_sanitize(input_str: str, expected: str):
         clientFileTime=datetime.now(),
         size=0
     )
-    assert meta.normalized_filename() == Path(expected)
+    assert meta.normalized_filepath() == Path(expected)
 
 @pytest.mark.parametrize("input_str,expected", [
     ("/assemblies/0133f6681e6df707/objectsXass,savedgame", SavegameBlobType.Savedgame),

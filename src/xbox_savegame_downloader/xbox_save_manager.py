@@ -14,12 +14,13 @@ from typing import Any, Iterable, List, Optional, Dict, Tuple
 from httpx import HTTPStatusError
 from pydantic import BaseModel, RootModel
 
-from common import GameMetadata, GameMetadataCollection, SaveMethod, load_games_collection
-from models import BlobsResponse
-from auth_manager_ex import AuthenticationManagerEx
 from xbox.webapi.common.exceptions import AuthenticationException
 from xbox.webapi.authentication.models import OAuth2TokenResponse, XAUResponse, XADResponse, XSTSResponse
 from xbox.webapi.common.signed_session import SignedSession, RequestSigner
+
+from .common import GameMetadata, GameMetadataCollection, SaveMethod, load_games_collection
+from .models import BlobsResponse
+from .auth_manager_ex import AuthenticationManagerEx
 
 logger = logging.getLogger(__name__)
 

@@ -3,8 +3,9 @@ import asyncio
 import logging
 from urllib.parse import urlparse, parse_qs
 from dotenv import load_dotenv
-from xbox_save_manager import XboxSaveManager
-from common import load_games_collection
+
+from .xbox_save_manager import XboxSaveManager
+from .common import load_games_collection
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -15,7 +16,7 @@ load_dotenv()
 XBOX_CLIENT_ID = os.getenv("XBOX_CLIENT_ID")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
-async def main():
+async def async_main():
     if not all([XBOX_CLIENT_ID, REDIRECT_URI]):
         logger.critical(
             "CRITICAL: Missing env vars. "
@@ -99,6 +100,8 @@ async def main():
         await dl_context.cleanup_files(download_dir)
         print("✅ Files cleaned up successfully.")
 
+def main():
+    asyncio.run(async_main()) 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    main()

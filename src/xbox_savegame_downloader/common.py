@@ -1,5 +1,5 @@
 from enum import StrEnum
-from typing import Dict, Optional
+from typing import Dict
 from pydantic import BaseModel, RootModel
 
 class SaveMethod(StrEnum):

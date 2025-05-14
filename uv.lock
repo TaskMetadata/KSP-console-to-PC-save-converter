@@ -164,37 +164,6 @@ wheels = [
 ]
 
 [[package]]
-name = "di-discord-bot"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "aiofiles" },
-    { name = "discord-py" },
-    { name = "httpx" },
-    { name = "jsonpath-ng" },
-    { name = "python-dotenv" },
-    { name = "xbox-webapi" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiofiles", specifier = ">=24.1.0" },
-    { name = "discord-py", specifier = ">=2.5.2" },
-    { name = "httpx", specifier = ">=0.28.1" },
-    { name = "jsonpath-ng", specifier = ">=1.7.0" },
-    { name = "python-dotenv", specifier = ">=1.1.0" },
-    { name = "xbox-webapi", git = "https://github.com/OpenXbox/xbox-webapi-python?rev=0a7aeac9f746466001964743d7a1e8e670560a2b" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3.5" }]
-
-[[package]]
 name = "discord-py"
 version = "2.5.2"
 source = { registry = "https://pypi.org/simple" }
@@ -551,6 +520,37 @@ sdist = { url = "https://files.pythonhosted.org/packages/82/5c/e6082df02e215b846
 wheels = [
     { url = "https://files.pythonhosted.org/packages/31/08/aa4fdfb71f7de5176385bd9e90852eaf6b5d622735020ad600f2bab54385/typing_inspection-0.4.0-py3-none-any.whl", hash = "sha256:50e72559fcd2a6367a19f7a7e610e6afcb9fac940c650290eed893d61386832f", size = 14125, upload_time = "2025-02-25T17:27:57.754Z" },
 ]
+
+[[package]]
+name = "xbox-savegame-downloader"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "aiofiles" },
+    { name = "discord-py" },
+    { name = "httpx" },
+    { name = "jsonpath-ng" },
+    { name = "python-dotenv" },
+    { name = "xbox-webapi" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aiofiles", specifier = ">=24.1.0" },
+    { name = "discord-py", specifier = ">=2.5.2" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "jsonpath-ng", specifier = ">=1.7.0" },
+    { name = "python-dotenv", specifier = ">=1.1.0" },
+    { name = "xbox-webapi", git = "https://github.com/OpenXbox/xbox-webapi-python?rev=0a7aeac9f746466001964743d7a1e8e670560a2b" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3.5" }]
 
 [[package]]
 name = "xbox-webapi"

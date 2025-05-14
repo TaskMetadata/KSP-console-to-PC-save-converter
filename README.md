@@ -4,7 +4,7 @@
 
 - Copy `env.sample` to `.env`
 - Edit `.env` with your values
-- 
+
 - Copy `games.json.sample` to `games.json`
 - Edit `games.json` with your value
 
@@ -16,11 +16,11 @@
 ## Standalone CLI
 
 ```
-uv run cli.py
+uv run xbox-savegame-cli
 ```
 
 ## Discord bot
 
 ```
-uv run discord_bot.py
+uv run xbox-savegame-discord_bot
 ```

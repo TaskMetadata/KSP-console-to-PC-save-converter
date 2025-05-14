@@ -6,11 +6,10 @@ import logging
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs
 import httpx
-from typing import List
 
-from xbox_save_manager import XboxSaveManager
-from common import load_games_collection
-from models import DboxGameResponse
+from .xbox_save_manager import XboxSaveManager
+from .common import load_games_collection
+from .models import DboxGameResponse
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -445,7 +444,7 @@ if ALLOW_CUSTOM_FETCH:
             logger.exception(f"search_command: Failed with error: {e}")
             await interaction.followup.send("❌ Failed to search for games. Please try again later.")
 
-if __name__ == "__main__":
+def main():
     if not all([DISCORD_BOT_TOKEN, XBOX_CLIENT_ID, REDIRECT_URI]):
         logger.critical(
             "CRITICAL: Missing env vars. Bot cannot start. "
@@ -453,4 +452,7 @@ if __name__ == "__main__":
         )
         exit(1)
 
-    bot.run(DISCORD_BOT_TOKEN) 
+    bot.run(DISCORD_BOT_TOKEN)
+
+if __name__ == "__main__":
+    main()

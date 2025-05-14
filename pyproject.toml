@@ -1,5 +1,5 @@
 [project]
-name = "di-discord-bot"
+name = "xbox-savegame-downloader"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -12,6 +12,13 @@ dependencies = [
     "httpx>=0.28.1",
     "jsonpath-ng>=1.7.0",
 ]
+
+[tool.uv]
+package = true
+
+[project.scripts]
+xbox-savegame-discord_bot = "xbox_savegame_downloader.discord_bot:main"
+xbox-savegame-cli = "xbox_savegame_downloader.cli:main"
 
 [dependency-groups]
 dev = [
