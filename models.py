@@ -21,6 +21,22 @@ class SavegameBlobType(StrEnum):
                 return enum_val
         return SavegameBlobType.Unknown
 
+"""
+Dbox API
+"""
+
+class DboxGameResponse(BaseModel):
+    title_id: str
+    name: str
+    systems: List[str]
+    bing_id: Optional[str] = None
+    service_config_id: Optional[str] = None
+    pfn: Optional[str] = None
+
+"""
+Titlestorage models
+"""
+
 class PagingInfo(BaseModel):
     totalItems: int
     continuationToken: Optional[str] = None

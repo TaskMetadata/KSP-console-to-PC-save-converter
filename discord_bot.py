@@ -5,9 +5,12 @@ import os
 import logging
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs
+import httpx
+from typing import List
 
 from xbox_save_manager import XboxSaveManager
 from common import load_games_collection
+from models import DboxGameResponse
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -348,6 +351,57 @@ if ALLOW_CUSTOM_FETCH:
         finally:
             # Clean up files after sending
             await dl_context.cleanup_files(download_dir)
+
+    @bot.tree.command(name="search", description="Search for Xbox games by name.")
+    async def search_command(interaction: discord.Interaction, name: str):
+        """Search for Xbox games by name."""
+        await interaction.response.defer(thinking=True, ephemeral=False)
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    "https://dbox.tools/api/title_ids/",
+                    params={
+                        "name": name,
+                        "system": ["XBOXONE"],
+                        "limit": 100,
+                        "offset": 0
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                
+                if data.get("count") == 0 or not data.get("items"):
+                    await interaction.followup.send(f"❌ No games found matching '{name}'")
+                    return
+
+                # Create an embed with the search results
+                embed = discord.Embed(
+                    title=f"🔍 Search Results for '{name}'",
+                    color=discord.Color.blue()
+                )
+
+                for game in data["items"]:
+                    game_info = DboxGameResponse.model_validate(game)
+                    value = (
+                        f"**Title ID:** `{game_info.title_id}`\n"
+                        f"**Systems:** {', '.join(game_info.systems)}\n"
+                        f"**SCID:** `{game_info.service_config_id}`\n"
+                        f"**PFN:** `{game_info.pfn}`\n\n"
+                        f"To download saves, use:\n"
+                        f"`/fetchcustom scid:{game_info.service_config_id} pfn:{game_info.pfn}`"
+                    )
+                    embed.add_field(
+                        name=game_info.name,
+                        value=value,
+                        inline=False
+                    )
+
+                await interaction.followup.send(embed=embed)
+
+        except Exception as e:
+            logger.exception(f"search_command: Failed with error: {e}")
+            await interaction.followup.send("❌ Failed to search for games. Please try again later.")
 
 if __name__ == "__main__":
     if not all([DISCORD_BOT_TOKEN, XBOX_CLIENT_ID, REDIRECT_URI]):
