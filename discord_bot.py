@@ -26,6 +26,7 @@ ALLOW_CUSTOM_FETCH = os.getenv("ALLOW_CUSTOM_FETCH")
 # Initialize bot with required intents
 intents = discord.Intents()
 intents.message_content = True
+intents.dm_messages = True
 intents.guilds = True
 #intents.members = True  # Required for some interactions
 bot = commands.Bot(command_prefix="!", intents=intents)
@@ -122,7 +123,7 @@ async def authenticate_command(interaction: discord.Interaction):
         return
 
     def check_dm(message: discord.Message):
-        return message.author.id == interaction.user.id and message.guild is None
+        return message.author.id == interaction.user.id and message.channel == dm_channel
 
     try:
         await dm_channel.send("Waiting for redirect URL...")
