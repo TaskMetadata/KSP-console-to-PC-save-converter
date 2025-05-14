@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  xbox_savegame_discord_bot:
+    container_name: xbox_savegame_discord_bot
+    image: ghcr.io/projectsparkdev/sparkxboxsavegamedownloader:main
+    env_file: .env
