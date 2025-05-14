@@ -218,18 +218,27 @@ class GameVersionSelect(discord.ui.Select):
             )
         except Exception as e:
             logger.exception(f"get_titlestorage_context: Failed with error: {e}")
-            await self.view.interaction.followup.send("❌ Getting authenticated context failed. Did you authentica successfully?")
+            await self.view.interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
             return
 
         success = True
         try:
             res = await dl_context.download_save_files()
+        except httpx.HTTPStatusError as http_ex:
+            status_code = http_ex.response.status_code
+            if status_code == 404:
+                details = f"Savegames for title '{game_pfn}' not found"
+            else:
+                details = f"HTTP Code {status_code}"
+            logger.error(f"download_save_files: Failure with error: {details}, err: {http_ex}")
+            success = False
         except Exception as e:
+            details = "Contact an admin for assistance"
             logger.exception(f"download_save_files: Failed with error: {e}")
             success = False
 
         if not success:
-            await self.view.interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
+            await self.view.interaction.followup.send(f"❌ Downloading saves failed. {details}")
             return
 
         download_dir, zip_filepath = res
@@ -334,12 +343,21 @@ if ALLOW_CUSTOM_FETCH:
         success = True
         try:
             res = await dl_context.download_save_files()
+        except httpx.HTTPStatusError as http_ex:
+            status_code = http_ex.response.status_code
+            if status_code == 404:
+                details = f"Savegames for title '{pfn}' not found"
+            else:
+                details = f"HTTP Code {status_code}"
+            logger.error(f"download_save_files: Failure with error: {details}, err: {http_ex}")
+            success = False
         except Exception as e:
+            details = "Contact an admin for assistance"
             logger.exception(f"download_save_files: Failed with error: {e}")
             success = False
 
         if not success:
-            await interaction.followup.send("❌ Downloading saves failed. Contact an admin for assistance.")
+            await interaction.followup.send(f"❌ Downloading saves failed. {details}")
             return
 
         download_dir, zip_filepath = res
