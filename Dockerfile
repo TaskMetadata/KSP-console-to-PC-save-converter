@@ -40,6 +40,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # Copy games.json from current directory into app's working directory
 COPY games.json.sample /app/games.json
+RUN touch /app/user_tokens.json
 
 # Run the FastAPI application by default
 CMD ["xbox-savegame-discord_bot"]
