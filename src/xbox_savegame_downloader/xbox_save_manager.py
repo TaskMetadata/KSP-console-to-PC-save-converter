@@ -166,14 +166,21 @@ class TitleStorageContext:
 
         downloaded_metadata_files = await asyncio.gather(
             *(self._download_blob_file(remote_filename, local_filepath)
-                for (remote_filename, local_filepath) in to_download)
+                for (remote_filename, local_filepath) in to_download),
+                return_exceptions=True
         )
 
         if not downloaded_metadata_files:
             logger.warning("Failed to download any atom-metadata files")
             return None
+        
+        raised_exceptions = [x for x in downloaded_metadata_files if isinstance(x, Exception)]
+        successfully_downloaded_metadata_files = [x for x in downloaded_metadata_files if isinstance(x, Path)]
 
-        logger.info(f"Downloaded {len(downloaded_metadata_files)} atom-metadata files")
+        for exc in raised_exceptions:
+            logger.error(f"Failed downloading metadata file, exception: {exc}")
+
+        logger.info(f"Downloaded {len(successfully_downloaded_metadata_files)} atom-metadata files (Failed: {len(raised_exceptions)})")
 
         """
         3. Download binaries (Actual atom binaries, filtered to grab only non-metadata ones)
@@ -183,6 +190,9 @@ class TitleStorageContext:
         """
         # Create a mapping of actual filepath and BlobMetadata
         filepath_map = list(zip(downloaded_metadata_files, blobs_response.blobs))
+
+        # Filter out the ones that threw an exception when downloading
+        filepath_map = [(path, meta) for (path, meta) in filepath_map if isinstance(path, Path)]
 
         #with open(blobs_filemapping, "wt") as f:
         #    json.dump(f, filepath_map, indent=2)
@@ -233,7 +243,7 @@ class TitleStorageContext:
 
         logger.info(f"Downloaded {len(successfully_downloaded_bins)} binary savedata files (Failed: {len(raised_exceptions)})")
 
-        downloaded_files = downloaded_metadata_files
+        downloaded_files = successfully_downloaded_metadata_files
         downloaded_files.extend(successfully_downloaded_bins)
         downloaded_files.append(blobs_filepath)
 
