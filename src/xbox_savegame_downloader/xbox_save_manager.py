@@ -221,13 +221,20 @@ class TitleStorageContext:
 
         downloaded_binary_files = await asyncio.gather(
             *(self._download_blob_file(remote_filename, local_filepath)
-                for (remote_filename, local_filepath) in to_download)
+                for (remote_filename, local_filepath) in to_download),
+                return_exceptions=True
         )
+
+        raised_exceptions = [x for x in downloaded_binary_files if isinstance(x, Exception)]
+        successfully_downloaded_bins = [x for x in downloaded_binary_files if isinstance(x, Path)]
+
+        for exc in raised_exceptions:
+            logger.error(f"Failed downloading file, exception: {exc}")
 
         logger.info(f"Downloaded {len(downloaded_binary_files)} binary savedata files")
 
         downloaded_files = downloaded_metadata_files
-        downloaded_files.extend(downloaded_binary_files)
+        downloaded_files.extend(successfully_downloaded_bins)
         downloaded_files.append(blobs_filepath)
 
         """
