@@ -1,3 +1,4 @@
+from typing import Optional
 import discord
 import asyncio
 from discord.ext import commands
@@ -7,6 +8,7 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs
 import httpx
 import random
+from mega.client import Mega
 
 from .xbox_save_manager import XboxSaveManager
 from .common import load_games_collection
@@ -16,6 +18,8 @@ from .models import DboxGameResponse
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+MAX_FILESIZE_FOR_DISCORD = (8 * 1024 * 1024) # 8MB
+
 # Load environment variables
 load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
@@ -23,8 +27,14 @@ XBOX_CLIENT_ID = os.getenv("XBOX_CLIENT_ID")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 ALLOW_CUSTOM_FETCH = os.getenv("ALLOW_CUSTOM_FETCH")
 
+# MEGA.NZ ACC (optional)
+MEGA_NZ_LOGIN = os.getenv("MEGA_NZ_LOGIN")
+MEGA_NZ_PASSWD = os.getenv("MEGA_NZ_PASSWD")
+
 if ALLOW_CUSTOM_FETCH:
     logger.info("[NOTE] Custom fetch is enabled via env")
+
+mega = Mega(use_progress_bar=False)
 
 # Initialize bot with required intents
 intents = discord.Intents()
@@ -57,6 +67,13 @@ async def on_ready():
     except Exception as e:
         logger.error(f"Error syncing slash commands: {e}")
     logger.info("------")
+    if MEGA_NZ_LOGIN and MEGA_NZ_PASSWD:
+        logger.info("MEGA.NZ credentials were provided, logging in...")
+        try:
+            await mega.login(MEGA_NZ_LOGIN, MEGA_NZ_PASSWD)
+            logger.info("Logged in to MEGA.NZ")
+        except Exception as e:
+            logger.error("Failed logging in to MEGA.NZ account")
 
 @bot.event
 async def on_guild_join(guild):
@@ -247,14 +264,37 @@ class GameVersionSelect(discord.ui.Select):
 
         download_dir, zip_filepath = res
 
-        try:
+        uploaded_link: Optional[str] = None
+        if mega.logged_in:
+            try:
+                await self.view.interaction.followup.send(
+                    content="Just one more moment..."
+                )
+                logger.info(f"Uploading file {zip_filepath} to MEGA.NZ")
+                uploaded = await mega.upload(str(zip_filepath))
+                uploaded_link = await mega.get_upload_link(uploaded)
+            except Exception as e:
+                logger.error(f"Failed uploading to MEGA.NZ, error: {e}")
+
+        if zip_filepath.stat().st_size > MAX_FILESIZE_FOR_DISCORD:
             await self.view.interaction.followup.send(
-                file=discord.File(zip_filepath),
-                content=f"✅ Savegame downloaded successfully, Enjoy!"
+                content=f"⚠️ Zip file is too large to be uploaded to Discord"
             )
-        finally:
-            # Clean up files after sending
-            await dl_context.cleanup_files(download_dir)
+            if uploaded_link:
+                await self.view.interaction.followup.send(
+                    content=f"Here is a MEGA.NZ link instead: {uploaded_link}"
+                )
+        else:
+            try:
+                await self.view.interaction.followup.send(
+                    file=discord.File(zip_filepath),
+                    content=f"✅ Savegame downloaded successfully, Enjoy!"
+                )
+            except Exception as e:
+                logger.error(f"Failed sending file attachment to discord, error: {e}")
+
+        # Clean up files after sending
+        await dl_context.cleanup_files(download_dir)
 
 
 @bot.tree.command(name="getsave", description="Download Xbox save.")
