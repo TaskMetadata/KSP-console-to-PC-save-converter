@@ -231,7 +231,7 @@ class TitleStorageContext:
         for exc in raised_exceptions:
             logger.error(f"Failed downloading file, exception: {exc}")
 
-        logger.info(f"Downloaded {len(downloaded_binary_files)} binary savedata files")
+        logger.info(f"Downloaded {len(successfully_downloaded_bins)} binary savedata files (Failed: {len(raised_exceptions)})")
 
         downloaded_files = downloaded_metadata_files
         downloaded_files.extend(successfully_downloaded_bins)
