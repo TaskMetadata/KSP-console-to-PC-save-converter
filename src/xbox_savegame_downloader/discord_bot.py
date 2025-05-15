@@ -81,6 +81,7 @@ async def on_guild_join(guild):
             command_list += "`/getsave` - Download your Xbox game saves\n"
             if ALLOW_CUSTOM_FETCH:
                 command_list += "`/fetchcustom scid:<ServiceConfigurationId> pfn:<PackageFamilyName>` - Fetch saves for arbitrary game\n"
+                command_list += "`/search name:<Game Name>` - Search for games\n"
             command_list += "`/help` - Show this help message"
 
             embed.add_field(
@@ -422,6 +423,10 @@ if ALLOW_CUSTOM_FETCH:
                 view = discord.ui.View()
                 for game in data["items"]:
                     game_info = DboxGameResponse.model_validate(game)
+                    if not game_info.pfn or not game_info.service_config_id:
+                        # Only savegames of titles with PFN/SCID can be downloaded, skip others
+                        continue
+
                     button = discord.ui.Button(
                         label=f"Download saves for {game_info.name}",
                         custom_id=f"{game_info.title_id}_{random.randint(0, 9999)}",
