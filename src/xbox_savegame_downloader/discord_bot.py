@@ -73,7 +73,7 @@ async def on_ready():
             await mega.login(MEGA_NZ_LOGIN, MEGA_NZ_PASSWD)
             logger.info("Logged in to MEGA.NZ")
         except Exception as e:
-            logger.error("Failed logging in to MEGA.NZ account")
+            logger.exception("Failed logging in to MEGA.NZ account")
 
 @bot.event
 async def on_guild_join(guild):
