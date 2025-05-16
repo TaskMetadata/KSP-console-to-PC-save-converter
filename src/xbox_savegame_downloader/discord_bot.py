@@ -55,6 +55,87 @@ xbox_manager = XboxSaveManager(
 games = load_games_collection("games.json")
 games_list = list(games.root.items())
 
+async def ensure_mega_logged_in() -> bool:
+    if MEGA_NZ_LOGIN and MEGA_NZ_PASSWD:
+        if mega.logged_in:
+            return True
+
+        try:
+            await mega.login(MEGA_NZ_LOGIN, MEGA_NZ_PASSWD)
+            logger.info("Refreshed login to MEGA.NZ")
+            return True
+        except Exception as e:
+            logger.exception("Failed logging in to MEGA.NZ account")
+    return False
+
+async def download_savedata(interaction: discord.Interaction, scid: str, pfn: str):
+    # Download save files
+    try:
+        dl_context = await xbox_manager.get_titlestorage_context(
+            str(interaction.user.id),
+            scid,
+            pfn,
+        )
+    except Exception as e:
+        logger.error(f"get_titlestorage_context: Failed with error: {e}")
+        await interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
+        return
+
+    success = True
+    try:
+        res = await dl_context.download_save_files()
+    except httpx.HTTPStatusError as http_ex:
+        status_code = http_ex.response.status_code
+        if status_code == 404:
+            details = f"Savegames for title '{pfn}' not found"
+        else:
+            details = f"HTTP Code {status_code}"
+        logger.error(f"download_save_files: Failure with error: {details}, err: {http_ex}")
+        success = False
+    except Exception as e:
+        details = "Contact an admin for assistance"
+        logger.exception(f"download_save_files: Failed with error: {e}")
+        success = False
+
+    if not success:
+        await interaction.followup.send(f"❌ Downloading saves failed. {details}")
+        return
+
+    download_dir, zip_filepath = res
+
+    uploaded_link: Optional[str] = None
+
+    if await ensure_mega_logged_in():
+        try:
+            await interaction.followup.send(
+                content="Just one more moment..."
+            )
+            logger.info(f"Uploading file {zip_filepath} to MEGA.NZ")
+            uploaded = await mega.upload(str(zip_filepath))
+            uploaded_link = await mega.get_upload_link(uploaded)
+        except Exception as e:
+            logger.error(f"Failed uploading to MEGA.NZ, error: {e}")
+
+    if zip_filepath.stat().st_size > MAX_FILESIZE_FOR_DISCORD:
+        await interaction.followup.send(
+            content=f"⚠️ Zip file is too large to be uploaded to Discord"
+        )
+        if uploaded_link:
+            await interaction.followup.send(
+                content=f"Here is a MEGA.NZ link instead: {uploaded_link}"
+            )
+    else:
+        try:
+            await interaction.followup.send(
+                file=discord.File(zip_filepath),
+                content=f"✅ Savegame downloaded successfully, Enjoy!"
+            )
+        except Exception as e:
+            logger.error(f"Failed sending file attachment to discord, error: {e}")
+
+    # Clean up files after sending
+    await dl_context.cleanup_files(download_dir)
+
 @bot.event
 async def on_ready():
     logger.info(f"Bot logged in as {bot.user.name} (ID: {bot.user.id})")
@@ -69,11 +150,7 @@ async def on_ready():
     logger.info("------")
     if MEGA_NZ_LOGIN and MEGA_NZ_PASSWD:
         logger.info("MEGA.NZ credentials were provided, logging in...")
-        try:
-            await mega.login(MEGA_NZ_LOGIN, MEGA_NZ_PASSWD)
-            logger.info("Logged in to MEGA.NZ")
-        except Exception as e:
-            logger.exception("Failed logging in to MEGA.NZ account")
+        await ensure_mega_logged_in()
 
 @bot.event
 async def on_guild_join(guild):
@@ -230,72 +307,7 @@ class GameVersionSelect(discord.ui.Select):
         except Exception as e:
             logger.warning(f"Error disabling select menu in view: {e}")
 
-        # Download save files
-        try:
-            dl_context = await xbox_manager.get_titlestorage_context(
-                str(self.view.interaction.user.id),
-                game_scid,
-                game_pfn,
-            )
-        except Exception as e:
-            logger.error(f"get_titlestorage_context: Failed with error: {e}")
-            await self.view.interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
-            return
-
-        success = True
-        try:
-            res = await dl_context.download_save_files()
-        except httpx.HTTPStatusError as http_ex:
-            status_code = http_ex.response.status_code
-            if status_code == 404:
-                details = f"Savegames for title '{game_pfn}' not found"
-            else:
-                details = f"HTTP Code {status_code}"
-            logger.error(f"download_save_files: Failure with error: {details}, err: {http_ex}")
-            success = False
-        except Exception as e:
-            details = "Contact an admin for assistance"
-            logger.exception(f"download_save_files: Failed with error: {e}")
-            success = False
-
-        if not success:
-            await self.view.interaction.followup.send(f"❌ Downloading saves failed. {details}")
-            return
-
-        download_dir, zip_filepath = res
-
-        uploaded_link: Optional[str] = None
-        if mega.logged_in:
-            try:
-                await self.view.interaction.followup.send(
-                    content="Just one more moment..."
-                )
-                logger.info(f"Uploading file {zip_filepath} to MEGA.NZ")
-                uploaded = await mega.upload(str(zip_filepath))
-                uploaded_link = await mega.get_upload_link(uploaded)
-            except Exception as e:
-                logger.error(f"Failed uploading to MEGA.NZ, error: {e}")
-
-        if zip_filepath.stat().st_size > MAX_FILESIZE_FOR_DISCORD:
-            await self.view.interaction.followup.send(
-                content=f"⚠️ Zip file is too large to be uploaded to Discord"
-            )
-            if uploaded_link:
-                await self.view.interaction.followup.send(
-                    content=f"Here is a MEGA.NZ link instead: {uploaded_link}"
-                )
-        else:
-            try:
-                await self.view.interaction.followup.send(
-                    file=discord.File(zip_filepath),
-                    content=f"✅ Savegame downloaded successfully, Enjoy!"
-                )
-            except Exception as e:
-                logger.error(f"Failed sending file attachment to discord, error: {e}")
-
-        # Clean up files after sending
-        await dl_context.cleanup_files(download_dir)
-
+        await download_savedata(self.view.interaction, game_scid, game_pfn)
 
 @bot.tree.command(name="getsave", description="Download Xbox save.")
 async def get_save_command(interaction: discord.Interaction):
@@ -371,49 +383,7 @@ if ALLOW_CUSTOM_FETCH:
     ):
         """Start the save file download process for a custom game."""
         await interaction.response.defer(thinking=True, ephemeral=False)
-
-        # Download save files
-        try:
-            dl_context = await xbox_manager.get_titlestorage_context(
-                str(interaction.user.id),
-                scid,
-                pfn,
-            )
-        except Exception as e:
-            logger.error(f"get_titlestorage_context: Failed with error: {e}")
-            await interaction.followup.send("❌ Getting authenticated context failed. Did you authenticate successfully?")
-            return
-
-        success = True
-        try:
-            res = await dl_context.download_save_files()
-        except httpx.HTTPStatusError as http_ex:
-            status_code = http_ex.response.status_code
-            if status_code == 404:
-                details = f"Savegames for title '{pfn}' not found"
-            else:
-                details = f"HTTP Code {status_code}"
-            logger.error(f"download_save_files: Failure with error: {details}, err: {http_ex}")
-            success = False
-        except Exception as e:
-            details = "Contact an admin for assistance"
-            logger.exception(f"download_save_files: Failed with error: {e}")
-            success = False
-
-        if not success:
-            await interaction.followup.send(f"❌ Downloading saves failed. {details}")
-            return
-
-        download_dir, zip_filepath = res
-
-        try:
-            await interaction.followup.send(
-                file=discord.File(zip_filepath),
-                content=f"✅ Savegame downloaded successfully, Enjoy!"
-            )
-        finally:
-            # Clean up files after sending
-            await dl_context.cleanup_files(download_dir)
+        await download_savedata(interaction, scid, pfn)
 
     @bot.tree.command(name="search", description="Search for Xbox games by name.")
     async def search_command(interaction: discord.Interaction, name: str):
