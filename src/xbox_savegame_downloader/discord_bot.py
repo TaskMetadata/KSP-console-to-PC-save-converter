@@ -102,7 +102,6 @@ async def download_savedata(interaction: discord.Interaction, scid: str, pfn: st
         return
 
     download_dir, zip_filepath = res
-
     uploaded_link: Optional[str] = None
 
     if await ensure_mega_logged_in():
@@ -420,9 +419,12 @@ if ALLOW_CUSTOM_FETCH:
                         f"**Title ID:** `{game_info.title_id}`\n"
                         f"**Systems:** {', '.join(game_info.systems)}\n"
                         f"**SCID:** `{game_info.service_config_id}`\n"
-                        f"**PFN:** `{game_info.pfn}`\n\n"
-                        f"Click the button below to copy the command"
+                        f"**PFN:** `{game_info.pfn}`"
                     )
+
+                    if game_info.scid and game_info.pfn:
+                        value += "\n\nClick the button below to download savedata"
+
                     embed.add_field(
                         name=game_info.name,
                         value=value,
