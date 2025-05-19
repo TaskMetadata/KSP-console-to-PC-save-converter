@@ -1,6 +1,8 @@
-# PoC
+# Spark Save downloader discord bot
+### a discord bot that allows anyone on any platform to download their game saves (project spark and others) from xbox live and use it somewhere else
+currently a bot is active in our [discord](https://discord.gg/zGGpFp8fSm). please join for instructions on how to use.
 
-## Prepare
+## Preparation
 
 - Copy `env.sample` to `.env`
 - Edit `.env` with your values
@@ -11,15 +13,15 @@
 - Install `uv` with your preferred method (https://docs.astral.sh/uv/)
 
 ## Run
+you can run this program as a bot or as a standalone CLI program.
 
-
-## Standalone CLI
+- ### Standalone CLI
 
 ```
 uv run xbox-savegame-cli
 ```
 
-## Discord bot
+- ### Discord bot
 
 ```
 uv run xbox-savegame-discord_bot
