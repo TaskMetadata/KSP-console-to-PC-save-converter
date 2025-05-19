@@ -46,3 +46,7 @@ docker compose -f docker-compose.development.yml up -d
 # Stop
 docker compose -f docker-compose.development.yml down
 ```
+
+---
+> this project was a joint effort between project spark community and disney infinity community.
+> made by tuxuser🐧 and lionthd🦁 
