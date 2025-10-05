@@ -1,9 +1,0 @@
-version: "3"
-
-services:
-  xbox_savegame_discord_bot:
-    extends:
-      file: docker-compose.yml
-      service: xbox_savegame_discord_bot
-    container_name: xbox_savegame_discord_bot-dev
-    build: .

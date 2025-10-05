@@ -71,7 +71,7 @@ async def async_main():
     chosen_game = None
     while True:
         try:
-            choice = int(input(f"Enter your choice (0-{len(games) - 1}): ").strip())
+            choice = 0
             chosen_game = games_list[choice]
             break
         except (ValueError, IndexError):
@@ -94,12 +94,6 @@ async def async_main():
     print(f"✅ Save files have been downloaded to: {download_dir}")
     print(f"✅ Zip: {zip_filepath}")
     
-    # Ask if user wants to clean up
-    cleanup = input("\nDo you want to clean up the downloaded files? (y/n): ").strip().lower()
-    if cleanup == 'y':
-        await dl_context.cleanup_files(download_dir)
-        print("✅ Files cleaned up successfully.")
-
 def main():
     asyncio.run(async_main()) 
 

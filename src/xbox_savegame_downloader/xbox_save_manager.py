@@ -260,15 +260,6 @@ class TitleStorageContext:
 
         return (download_dir, zip_filepath)
 
-    @staticmethod
-    async def cleanup_files(download_dir: Path) -> None:
-        """Clean up downloaded files and directories."""
-        try:
-            if download_dir.is_dir():
-                shutil.rmtree(download_dir)
-        except Exception as e:
-            logger.warning(f"Error during cleanup: {e}")
-
 class XboxSaveManager:
     def __init__(self, client_id: str, redirect_uri: str, tokens_file: str = "user_tokens.json", download_dir: str = "downloads"):
         self.client_id = client_id
@@ -280,7 +271,7 @@ class XboxSaveManager:
         self.games_meta = self.load_game_meta_dict("games.json")
         # Gamefile transform functions
         self.jsonpath_exprs = self.load_jsonpath_filters(self.games_meta)
-
+    
     @staticmethod
     def load_game_meta_dict(filepath: str) -> Dict[str, GameMetadata]:
         res = load_games_collection(filepath)

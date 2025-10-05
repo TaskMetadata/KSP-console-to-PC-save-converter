@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/xbox_savegame_downloader/__init__.py
+src/xbox_savegame_downloader/auth_manager_ex.py
+src/xbox_savegame_downloader/cli.py
+src/xbox_savegame_downloader/common.py
+src/xbox_savegame_downloader/models.py
+src/xbox_savegame_downloader/xbox_save_manager.py
+src/xbox_savegame_downloader.egg-info/PKG-INFO
+src/xbox_savegame_downloader.egg-info/SOURCES.txt
+src/xbox_savegame_downloader.egg-info/dependency_links.txt
+src/xbox_savegame_downloader.egg-info/entry_points.txt
+src/xbox_savegame_downloader.egg-info/requires.txt
+src/xbox_savegame_downloader.egg-info/top_level.txt

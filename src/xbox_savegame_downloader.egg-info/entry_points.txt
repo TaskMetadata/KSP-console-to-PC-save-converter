@@ -1,0 +1,3 @@
+[console_scripts]
+xbox-savegame-cli = xbox_savegame_downloader.cli:main
+xbox-savegame-discord_bot = xbox_savegame_downloader.discord_bot:main

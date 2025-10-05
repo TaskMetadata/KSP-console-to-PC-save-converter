@@ -1,0 +1,7 @@
+discord.py>=2.5.2
+python-dotenv>=1.1.0
+xbox-webapi@ git+https://github.com/OpenXbox/xbox-webapi-python@0a7aeac9f746466001964743d7a1e8e670560a2b
+aiofiles>=24.1.0
+httpx>=0.28.1
+jsonpath-ng>=1.7.0
+mega@ git+https://github.com/NTFSvolume/mega.py@master
