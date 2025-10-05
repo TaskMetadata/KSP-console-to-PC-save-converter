@@ -68,6 +68,7 @@ async def async_main():
         name, _ = kvp
         print(f"{i}. {name}")
 
+# choice was set to 0 manually, as KSP is the only game within this version's games.json
     chosen_game = None
     while True:
         try:
@@ -94,6 +95,12 @@ async def async_main():
     print(f"✅ Save files have been downloaded to: {download_dir}")
     print(f"✅ Zip: {zip_filepath}")
     
+    # Ask if user wants to clean up - has been set to "n" manually.
+    cleanup = "n"
+    if cleanup == 'y':
+        await dl_context.cleanup_files(download_dir)
+        print("✅ Files cleaned up successfully.")
+
 def main():
     asyncio.run(async_main()) 
 
