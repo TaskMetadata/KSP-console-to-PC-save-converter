@@ -26,15 +26,21 @@ This should still work on Mac and Linux, albeit some instructions might be wrong
 
 ## Instructions:
 
-(sorry for the excessive length. Majority of it is explanation and additional information)
+
 
 1. Your KSP saves should be backed up to the Xbox Network. That is, ensure you’ve been online while running the game, perhaps leave it running for a little while with a savegame loaded to make sure it has backed up the latest saves.
 
-6. Running the python extractor: Finally, We’ll prepare for and run the Python script that converts the savegame pseudo-folder-files into folders & files. Download the python extractor (the .py file) from this repo into an empty folder by clicking on it at the top of the page and clicking the download button on the righthand side. Also in that same folder, create more folders, naming them for each savegame/pseudo-folder-files we’ll be extracting – for now, use the same names as the gibberish names of the pseudo-folder-files, so we know which pseudo-folder-file was extracted where. Later, you’ll be able to check the correct name of the savegame and rename the folder for it.\
-The syntax (in cmd) for the extractor (the .py file) is `python [path to the extractor] [path to the input file] [path to the output folder]` without the square brackets. The extractor takes one of the input pseudo-folder-files downloaded from xbcsmgr, and extracts it into an output folder. See example #1 in [the examples section](#Examples-see-hashtags-above) for an example. Note that the extractor can only do one savegame/pseudo-folder-file at a time.
+2. **Running the downloader:** You should have Git and UV installed by this point. You should also download the whole repo, as we'll be using all of the files contained here - by clicking the green 'code' button and downloading as a ZIP. extract it to a location of your choice; preferably somewhere not too deep in directories, because Windows has a 256 character limit when inputting paths for some of the python programs, and it can cause problems. Open powershell and type in, then enter, `cd [path of Downloader (modified spark downloader)]` - without the square brackets, and the path will need quotation marks on the start and end if the way you copied it in didn't automatically insert them. Next, type and enter `uv run xbox-savegame-cli`. That should trigger the program to run; once its ready, it should prompt you with a link to copy and paste into a browser. The way this downloader works, it acts as a standard linked application that requests, through the official Microsoft login portal, to read basic profile data. It will prompt you to login if you aren't already[^1] and then that sends the token off onto another URL; which doesn't actually work. This is what needs to be pasted back into the program, because it is able to use that broken link to read savedata associated with your profile. It should then accept the link, and eventually tell you that "savefiles have been downloaded to ...". Note that it will download a regular folder copy of them, and a ZIP copy of them - this ZIP copy can be extracted and used as a backup if something goes wrong.
 
-This should now have extracted compressed pseudo-folder-files, into blobs of files and then decompressed them. The output folders (i.e. the ones you created and named with the gibberish names) are the folders you can put into the saves directory in the game. The game's 'load saved games' menu also doesn't show the correct names, but the in-game ( when you've loaded a savegame/quicksave) menu does, on the top bar of the menu. Therefore, you can put one folder in at a time, launch the game, load one of the (concurrently gibberish-named) savegames, see the correct name in the in-game menu, and rename the savegame on the 'load saved games' menu and the savegame folder. This is optional, however.
+3. **Converting the savefiles to the PC version:** You should have Python installed by this point. At the moment, your savefiles can be found within "Downloader (modified spark downloader"/downloads/cli_user_[number]/SaveData/" - however, they are currently in a raw, compressed-folder format and not readable. "extractor.py" will extract and convert them to a PC-readable format: to run it, type and enter into powershell or command prompt: `python [path of extractor.py] [path of the input folder] [path of the output folder]` again, wihout square brackets, and with quotation marks if not automatically inserted, and - you will need to make a new folder (output folder) somewhere on your device, into which the extractor will convert the files. The end result of this should be a bunch of folders with gibberish names - these are the standard PC KSP savegame folders that are usually found in "[drive]:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\saves\"
 
+5. **Final repairing:** The remaining .py programs can be run in any order, but I generally recommend running the savegame-folder-renamer first. Unlike the extractor, these programs don't need output folders; they run in-place, replacing what is already there. for these, the command is `python [path of the .py program] [path of the input folder]` with the input folder being the folder that contains the savegame folders. After all 4 applications have been run, you are done - you may put all the savegame folders into the usual directory outlined in the above step.
+
+Enjoy!
+
+[^1]: (logging into a microsoft service previously during that browser session should mean it automatically redirects you to the following URL) - This means that, if you are understandably uncomfortable with entering your login details on some random link provided to you, you can login to your account on the official microsoft website, then open the link - as it uses the official Microsoft web authentication API, it can use the browser session token and you won't be prompted to log in.
+
+Should you wish to now deny the application's access to read your profile data, you can do so in Microsoft Account settings online.
 
 # Credits
 
@@ -53,13 +59,14 @@ This should now have extracted compressed pseudo-folder-files, into blobs of fil
 
 ## Python:
 
-- **“Errno 2: no such file or directory”:** Ensure you include the ‘.py’ extension in the filename for the extractor path.
+- **“Errno 2: no such file or directory”:** Ensure you include the ‘.py’ extension in the filename for the program path.
 
+- **multiple exceptions with the last one being about a ZIP creation** - path to the output folder is too long and exceeds windows' limit. please put it somewhere else temporarily, like on your desktop.
 
 ## Bugs:
 - The 'common' pseudo-folder-file (which includes scenario saves and tutorial saves) doesn't work straight up - I've been extremely busy and haven't had much time at all to test anything.
 
-- ~~Need to test and fix DLC part names' mismatches~~ -**fixed**
+- ~~Need to test and fix DLC part names' mismatches~~ -**fixed, see the [more info](#-More-info/backstory) section.**
 
 # Examples (see hashtags above)
 
