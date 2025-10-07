@@ -1,11 +1,5 @@
 # KSP-console-to-PC-save-converter
 
-work in progress, should be done in the next few days (start of october)
-if you're reading this, its not yet ready for use!
-
-
-
-
 
 # Requirements and instructions
 ## Requirements:
@@ -13,7 +7,7 @@ if you're reading this, its not yet ready for use!
 
 ## Important notes:
 
-A demo video: 
+A demo video: coming soon, sometime in mid october.
 
 1. I use ‘savegame’ to refer to the options seen on the ‘load game’ menu on the main menu. I use ‘quicksaves’ to refer to the options seen in the ‘load’ menu on the pause menu while in a savegame.
 
@@ -22,9 +16,13 @@ A demo video:
 3. I’ve written this page for use with a Windows computer and an Xbox. 
 This should still work on Mac and Linux, albeit some instructions might be wrong (e.g. there is no Microsoft Store on Mac or Linux). Use equivalent methods for them.\
 ***As for Playstation*** – The Playstation edition is very similar to the Xbox edition, if not identical, and their save structures are the same. Therefore, the .py extractor on this page can be used on their files too. However, you'll need another way to actually get the save files off the console; this page only has instructions for downloading the saves off of Xboxes (steps 1-3). I've heard that the PS4 can download savefiles onto USB, and apparently there is a subscription service for Playstation 5 that allows uploading savefiles to the cloud. -- edit: I have confirmed that you can indeed download save files from ps4 and ps5, but they are encrypted and in an unreadable format. I have no experience in ps4 or ps5 tools, but it seems like they can be decrypted using other tools. You'll need to do that before using the standalone .py programs here.  
-Therefore, steps 1 to 3 are for Xbox only (as they are instructions to download the saves from an Xbox) but I still *highly recommend* reading step 3, as it includes info that is seen in the Playstation version too. Steps 4 and 5 apply to both consoles - once you have obtained the save files from a playstation, you may proceed to step 3/4. Do also note that I may mention Xbox buttons or Xbox saves, but generally you can replace it with an equivalent process or word for Playstation.
+Therefore, steps 1 and 2 are for Xbox only (as they are instructions to download the saves from an Xbox) but I still *highly recommend* reading them, as it includes info that is seen in the Playstation version too. Steps 3 and 4 apply to both consoles - once you have obtained the save files from a playstation, you may proceed to step 3/4. Do also note that I may mention Xbox buttons or Xbox saves, but generally you can replace the word with an equivalent process or word for Playstation.
 
-5. 
+4. Please do not name any folders relating to this project as "common", as this can cause a conflict with the savegame-folder-renamer.py program. There will be a "common" file/folder downloaded by the program; that's fine, don't rename it.
+
+5. (pertains to step 3) if you need to change the Xbox profile/Microsoft account that the downloader will use, and you've already run the downloader and pasted in the authentication link, you'll need to delete the saved authentication tokens: find "user_tokens.json" in the "Downloader (modified spark downloader)" folder and delete it, then run the downloader again. It should re-prompt you to do the authentication link.
+
+6. The downloader does not work with child (<18) Microsoft accounts, as the authentication system for those works a little differently.
 
 
 ## Instructions:
@@ -35,15 +33,15 @@ Therefore, steps 1 to 3 are for Xbox only (as they are instructions to download 
 
 2. **Running the downloader:** You should have Git and UV installed by this point. You should also download the whole repo, as we'll be using all of the files contained here - by clicking the green 'code' button and downloading as a ZIP. extract it to a location of your choice; preferably somewhere not too deep in directories, because Windows has a 256 character limit when inputting paths for some of the python programs, and it can cause problems. Open powershell and type in, then enter, `cd [path of Downloader (modified spark downloader)]` - without the square brackets, and the path will need quotation marks on the start and end if the way you copied it in didn't automatically insert them. Next, type and enter `uv run xbox-savegame-cli`. That should trigger the program to run; once its ready, it should prompt you with a link to copy and paste into a browser. The way this downloader works, it acts as a standard linked application that requests, through the official Microsoft login portal, to read basic profile data. It will prompt you to login if you aren't already[^1] and then that sends the token off onto another URL; which doesn't actually work. This is what needs to be pasted back into the program, because it is able to use that broken link to read savedata associated with your profile. It should then accept the link, and eventually tell you that "savefiles have been downloaded to ...". Note that it will download a regular folder copy of them, and a ZIP copy of them - this ZIP copy can be extracted and used as a backup if something goes wrong.
 
-3. **Converting the savefiles to the PC version:** You should have Python installed by this point. At the moment, your savefiles can be found within "Downloader (modified spark downloader"/downloads/cli_user_[number]/SaveData/" - however, they are currently in a raw, compressed-folder format and not readable. "extractor.py" will extract and convert them to a PC-readable format: to run it, type and enter into powershell or command prompt: `python [path of extractor.py] [path of the input folder] [path of the output folder]` again, wihout square brackets, and with quotation marks if not automatically inserted, and - you will need to make a new folder (output folder) somewhere on your device, into which the extractor will convert the files. The end result of this should be a bunch of folders with gibberish names - these are the standard PC KSP savegame folders that are usually found in "[drive]:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\saves\"
+3. **Converting the savefiles to the PC version:** You should have Python installed by this point. At the moment, your savefiles can be found within "Downloader (modified spark downloader"/downloads/cli_user_[number]/SaveData/" - however, they are currently in a raw, compressed-folder format and not readable (I call these pseudo-folder-files in my [more-info section below](#More-info/backstory). "extractor.py" will extract and convert them to a PC-readable format: to run it, type and enter into powershell or command prompt: `python [path of extractor.py] [path of the input folder] [path of the output folder]` again, wihout square brackets, and with quotation marks if not automatically inserted, and - you will need to make a new folder (output folder) somewhere on your device, into which the extractor will convert the files. The end result of this should be a bunch of folders with gibberish names - these are the standard PC KSP savegame folders that are usually found in "[drive]:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\saves\"
 
-5. **Final repairing:** The remaining .py programs can be run in any order, but I generally recommend running the savegame-folder-renamer first. Unlike the extractor, these programs don't need output folders; they run in-place, replacing what is already there. for these, the command is `python [path of the .py program] [path of the input folder]` with the input folder being the folder that contains the savegame folders. After all 4 applications have been run, you are done - you may put all the savegame folders into the usual directory outlined in the above step.
+4. **Final repairing:** The remaining .py programs can be run in any order, but I generally recommend running the savegame-folder-renamer first. Unlike the extractor, these programs don't need output folders; they run in-place, replacing what is already there. for these, the command is `python [path of the .py program] [path of the input folder]` with the input folder being the folder that contains the savegame folders. After all 4 applications have been run, you are done - you may put all the savegame folders into the usual directory outlined in the above step.
 
 Enjoy!
 
-[^1]: (logging into a microsoft service previously during that browser session should mean it automatically redirects you to the following URL) - This means that, if you are understandably uncomfortable with entering your login details on some random link provided to you, you can login to your account on the official microsoft website, then open the link - as it uses the official Microsoft web authentication API, it can use the browser session token and you won't be prompted to log in.
-
 Should you wish to now deny the application's access to read your profile data, you can do so in Microsoft Account settings online.
+
+Git and Python can be uninstalled from Windows settings' apps section (or equivalent on Linux and Mac). UV can be uninstalled by running the 3-5 powershell commands found [here](https://docs.astral.sh/uv/getting-started/installation/#uninstallation).
 
 # Credits
 
@@ -64,12 +62,18 @@ Should you wish to now deny the application's access to read your profile data, 
 
 - **“Errno 2: no such file or directory”:** Ensure you include the ‘.py’ extension in the filename for the program path.
 
-- **multiple exceptions with the last one being about a ZIP creation** - path to the output folder is too long and exceeds windows' limit. please put it somewhere else temporarily, like on your desktop.
+## Downloader:
+
+- **multiple exceptions with the last one being about a ZIP creation:** path to the output folder is too long and exceeds windows' limit. please put it somewhere else temporarily, like on your desktop.
+
+- **"404 not found":** You may have the wrong Microsoft account logged in - ensure you have logged in with the account linked to the Xbox profile which owns Kerbal Space Program Enhanced Edition. See point 5 over [here](#Important-notes).
 
 ## Bugs:
 - The 'common' pseudo-folder-file (which includes scenario saves and tutorial saves) doesn't work straight up - I've been extremely busy and haven't had much time at all to test anything.
 
 - ~~Need to test and fix DLC part names' mismatches~~ -**fixed, see the [more info](#-More-info/backstory) section.**
+
+- Legacy parts will be converted to their new versions when moving from console to PC due to them being moreso properly deprecated in the newer version of the game on PC versus the situation on console. This may cause positioning problems, with some parts either falling off at launch or leaving gaps (but still seemingly stuck together and not disconnected) between parts.
 
 # Examples (see hashtags above)
 
@@ -127,12 +131,13 @@ Changes between the Project Spark Downloader and this project:
 - .env edited to work straight away from download, versus having the user input values
 - removed discord bot functionality - this project currently only uses the CLI program form of the Project Spark Downloader. - discord bot functionality could be added back in relatively easily.
 - removed a couple steps of the CLI program when it did not make sense for KSP saves (e.g. files cleanup step, games choice/select step)
+- cleaned out a few unnecessary files
 - note to self: Discord bot outputs games' title ID in hexadecimal! Do not try to put the title ID value straight into the games.json without converting to decimal first!
 
 
 Cheers, and thanks for reading!
 
 
-
+[^1]: (logging into a microsoft service previously during that browser session should mean it automatically redirects you to the following URL) - This means that, if you are understandably uncomfortable with entering your login details on some random link provided to you, you can login to your account on the official microsoft website, then open the link - as it uses the official Microsoft web authentication API, it can use the browser session token and you won't be prompted to log in.
 
 [^2]: (C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\GameData\Squad\zDeprecated)
