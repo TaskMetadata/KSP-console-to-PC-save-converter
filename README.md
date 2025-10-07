@@ -4,6 +4,12 @@
 # Requirements and instructions
 ## Requirements:
 
+- [Git](https://git-scm.com/downloads). Default installation settings will work fine.
+
+- [uv](https://docs.astral.sh/uv/getting-started/installation/). I installed it using the top method on that page, by running `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` in Powershell. Use alternate methods found on that website for Mac and Linux.
+
+- Python. I installed it by typing `python` into command prompt or powershell, which brings up a Microsoft Store prompt to download it. For Mac and Linux, use alternate methods; just downloading the base interpreter will do.
+
 
 ## Important notes:
 
@@ -69,15 +75,15 @@ Git and Python can be uninstalled from Windows settings' apps section (or equiva
 - **"404 not found":** You may have the wrong Microsoft account logged in - ensure you have logged in with the account linked to the Xbox profile which owns Kerbal Space Program Enhanced Edition. See point 5 over [here](#Important-notes).
 
 ## Bugs:
-- The 'common' pseudo-folder-file (which includes scenario saves and tutorial saves) doesn't work straight up - I've been extremely busy and haven't had much time at all to test anything.
-
+- The "common" pseudo-folder-file/savegame folder (which includes scenario saves and training saves) works, but from what I've seen, PC KSP seems to celan out scenario and training savegames often, and I can't get it to consistently keep the savegames present and not delete them. However, you are welcome to try - inside the common folder you will find scenario savegames and training savegames, combined together; you'll need to sort and separate them yourself, and then put them into PC KSP's "scenarios" folder and "training" folder within the standard "saves" folder (usually found in "[drive]:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\saves\")
+ 
 - ~~Need to test and fix DLC part names' mismatches~~ -**fixed, see the [more info](#-More-info/backstory) section.**
 
 - Legacy parts will be converted to their new versions when moving from console to PC due to them being moreso properly deprecated in the newer version of the game on PC versus the situation on console. This may cause positioning problems, with some parts either falling off at launch or leaving gaps (but still seemingly stuck together and not disconnected) between parts.
 
-# Examples (see hashtags above)
+# Examples
 
-#1. If I had the python extractor with the path ‘C:\Users\JohnDoe\Desktop\python extractor\extract.py’, and had the input pseudo-folder-file from xbcsmgr with the path ‘C:\Users\JohnDoe\Desktop\xbcsmgrfiles\gibberishname’, and wanted to output it to a folder with the path ‘C:\Users\JohnDoe\Desktop\outputkspsavegames\gibberishname1\’, I would use the command ‘python “C:\Users\JohnDoe\Desktop\python extractor\extract.py” C:\Users\JohnDoe\Desktop\xbcsmgrfiles\gibberishname C:\Users\JohnDoe\Desktop\outputkspsavegames\gibberishname1\’ (the first path has quotation marks as it contains a space, otherwise cmd would treat the path as 2 separate terms).
+coming soon
 
 
 
