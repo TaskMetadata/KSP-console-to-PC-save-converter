@@ -51,7 +51,7 @@ Enjoy!
 
 Should you wish to now deny the application's access to read your profile data, you can do so in Microsoft Account settings online.
 
-Git and Python can be uninstalled from Windows settings' apps section (or equivalent on Linux and Mac). UV can be uninstalled by running the 3-5 powershell commands found [here](https://docs.astral.sh/uv/getting-started/installation/#uninstallation).
+dissect.cstruct can be uninstalled (before uninstalling Python) by entering in "pip uninstall dissect.cstruct" into powershell or command prompt. Git and Python can be uninstalled from Windows settings' apps section (or equivalent on Linux and Mac). UV can be uninstalled by running the 3-5 powershell commands found [here](https://docs.astral.sh/uv/getting-started/installation/#uninstallation).
 
 # Credits
 
