@@ -1,5 +1,4 @@
-# KSP-console-to-PC-save-converter
-
+This repo is for version 2 of the project; see [here](https://github.com/TaskMetadata/OLD-KSP-console-to-PC-save-converter) for the old version.
 
 # Requirements and instructions
 ## Requirements:
@@ -17,7 +16,7 @@
 
 ## Important notes:
 
-A demo video: coming soon, sometime in mid october.
+A demo video: https://www.youtube.com/watch?v=Ma9XXlXiOS0
 
 1. I use ‘savegame’ to refer to the options seen on the ‘load game’ menu on the main menu. I use ‘quicksaves’ to refer to the options seen in the ‘load’ menu on the pause menu while in a savegame.
 
@@ -43,7 +42,7 @@ Therefore, steps 1 and 2 are for Xbox only (as they are instructions to download
 
 2. **Running the downloader:** You should have Git and UV installed by this point. ***Make sure to close the powershell window after installing them; they won't work until powershell is restarted.*** You should also download the whole repo, as we'll be using all of the files contained here - by clicking the green 'code' button and downloading as a ZIP. extract it to a location of your choice; preferably somewhere not too deep in directories, because Windows has a 256 character limit when inputting paths for some of the python programs, and it can cause problems. Open powershell and type in, then enter, `cd [path of Downloader (modified spark downloader)]` - without the square brackets, and the path will need quotation marks on the start and end if the way you copied it in didn't automatically insert them. Next, type and enter `uv run xbox-savegame-cli`. That should trigger the program to run; once its ready, it should prompt you with a link to copy and paste into a browser. The way this downloader works, it acts as a standard linked application that requests, through the official Microsoft login portal, to read basic profile data. It will prompt you to login if you aren't already[^1] and then that sends the token off onto another URL; which doesn't actually work. This is what needs to be pasted back into the program, because it is able to use that broken link to read savedata associated with your profile. It should then accept the link, and eventually tell you that "savefiles have been downloaded to ...". Note that it will download a regular folder copy of them, and a ZIP copy of them - this ZIP copy can be extracted and used as a backup if something goes wrong.
 
-3. **Converting the savefiles to the PC version:** You should have Python and dissect.cstruct installed by this point. At the moment, your savefiles can be found within "Downloader (modified spark downloader)/downloads/cli_user_[number]/SaveData/" - however, they are currently in a raw, compressed-folder format and not readable (I call these pseudo-folder-files in my [more-info section below](#more-infobackstory). At this point, you can compare the size of these downloaded pseudo-folder-files as a whole, to the reported savedata size on Xbox; it should be roughly the same size. "extractor.py" will extract and convert those pseudo-folder-files to a PC-readable format: to run it, type and enter into powershell or command prompt: `python [path of extractor.py] [path of the input folder] [path of the output folder]` again, wihout square brackets, and with quotation marks if not automatically inserted, and - you will need to make a new folder (output folder) somewhere on your device, into which the extractor will convert the files. The end result of this should be a bunch of folders with gibberish names - these are the standard PC KSP savegame folders that are usually found in "[drive]:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\saves\"
+3. **Converting the savefiles to the PC version:** You should have Python and dissect.cstruct installed by this point. At the moment, your savefiles can be found within "Downloader (modified spark downloader)/downloads/cli_user_[number]/SaveData/" - however, they are currently in a raw, compressed-folder format and not readable (I call these pseudo-folder-files in my [more-info section below](#more-infobackstory). At this point, you can compare the size of these downloaded pseudo-folder-files as a whole[^3], to the reported savedata size on Xbox[^4]; it should be roughly the same size. "extractor.py" will extract and convert those pseudo-folder-files to a PC-readable format: to run it, type and enter into powershell or command prompt: `python [path of extractor.py] [path of the input folder] [path of the output folder]` again, wihout square brackets, and with quotation marks if not automatically inserted, and - you will need to make a new folder (output folder) somewhere on your device, into which the extractor will convert the files. The end result of this should be a bunch of folders with gibberish names - these are the standard PC KSP savegame folders that are usually found in "[drive]:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\saves\"
 
 4. **Final repairing:** The remaining .py programs can be run in any order, but I generally recommend running the savegame-folder-renamer first. Unlike the extractor, these programs don't need output folders; they run in-place, replacing what is already there. for these, the command is `python [path of the .py program] [path of the input folder]` with the input folder being the folder that contains the savegame folders. After all 4 applications have been run, you are done - you may put all the savegame folders into the usual directory outlined in the above step.
 
@@ -51,6 +50,7 @@ Enjoy!
 
 Should you wish to now deny the application's access to read your profile data, you can do so in Microsoft Account settings online.
 
+<a name="uninstall-section-anchor"></a>
 dissect.cstruct can be uninstalled (before uninstalling Python) by entering in "pip uninstall dissect.cstruct" into powershell or command prompt. Git and Python can be uninstalled from Windows settings' apps section (or equivalent on Linux and Mac). UV can be uninstalled by running the 3-5 powershell commands found [here](https://docs.astral.sh/uv/getting-started/installation/#uninstallation).
 
 # Credits
@@ -60,7 +60,7 @@ dissect.cstruct can be uninstalled (before uninstalling Python) by entering in "
 - [Billynothingelse](https://www.github.com/billynothingelse) - for having created the save transferer program that would end up being my holy grail, after I struggled to find any method that worked.
 - JonnyOThan, over on discord - helped with some questions I had about the savefiles.
 - Falcon, on discord - for doing nearly all the work on fixing the part name mismatch bug, and verifying that the modified save downloader worked.
--Soltinator, for creating the [Project Spark Downloader](https://github.com/ProjectSparkDev/SparkXboxSavegameDownloader)
+- Soltinator, for creating the [Project Spark Downloader](https://github.com/ProjectSparkDev/SparkXboxSavegameDownloader)
 - Everyone who said this was impossible - You awakened the stubbornness in me, and made me pursue this further.
 - Everyone else who uses this - I hope this helps you, and you do something fun/cool with it.
 
@@ -78,18 +78,14 @@ dissect.cstruct can be uninstalled (before uninstalling Python) by entering in "
 
 - **"404 not found":** You may have the wrong Microsoft account logged in - ensure you have logged in with the account linked to the Xbox profile which owns Kerbal Space Program Enhanced Edition. See point 5 over [here](#Important-notes).
 
+- **"WinError2" or something about certain packages not building successfully when running UV:** [uninstall](#uninstall-section-anchor) dissect.cstruct, Python, UV, and Git, then restart your PC, and redo the process. At least, that's what I had to do when I encountered this...
+
 ## Bugs:
 - The "common" pseudo-folder-file/savegame folder (which includes scenario saves and training saves) works, but from what I've seen, PC KSP seems to celan out scenario and training savegames often, and I can't get it to consistently keep the savegames present and not delete them. However, you are welcome to try - inside the common folder you will find scenario savegames and training savegames, combined together; you'll need to sort and separate them yourself, and then put them into PC KSP's "scenarios" folder and "training" folder within the standard "saves" folder (usually found in "[drive]:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\saves\")
  
 - ~~Need to test and fix DLC part names' mismatches~~ -**fixed, see the [more info](#more-infobackstory) section.**
 
 - Legacy parts will be converted to their new versions when moving from console to PC due to them being moreso properly deprecated in the newer version of the game on PC versus the situation on console. This may cause positioning problems, with some parts either falling off at launch or leaving gaps (but still seemingly stuck together and not disconnected) between parts.
-
-# Examples
-
-coming soon
-
-
 
 
 # More info/backstory
@@ -151,3 +147,7 @@ Cheers, and thanks for reading!
 [^1]: (logging into a microsoft service previously during that browser session should mean it automatically redirects you to the following URL) - This means that, if you are understandably uncomfortable with entering your login details on some random link provided to you, you can login to your account on the official microsoft website, then open the link - as it uses the official Microsoft web authentication API, it can use the browser session token and you won't be prompted to log in.
 
 [^2]: (C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\GameData\Squad\zDeprecated)
+
+[^3]: Check the size in the "properties" window of the "SaveData" folder in which the pseudo-folder-files are stored.
+
+[^4]: On Xbox, press the menu button while Kerbal Space Program is selected; then select "manage game and addons", and then select "saved data". The entry under your profile name will tell you how many MB of save data you have for KSP.
