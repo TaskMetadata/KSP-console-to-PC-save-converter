@@ -16,7 +16,7 @@ This repo is for version 2 of the project; see [here](https://github.com/TaskMet
 
 ## Important notes:
 
-A demo video: https://youtu.be/5t009XG7-s4
+A demo video: https://www.youtube.com/watch?v=wOr-kQe22Fc
 
 1. I use ‘savegame’ to refer to the options seen on the ‘load game’ menu on the main menu. I use ‘quicksaves’ to refer to the options seen in the ‘load’ menu on the pause menu while in a savegame.
 
